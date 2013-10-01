@@ -30,7 +30,7 @@
 }
 .mathquill-editable,
 .mathquill-embedded-latex .mathquill-editable {
-  border: 1px solid gray;
+  border: 1px solid black;
   padding: 2px;
 }
 .mathquill-embedded-latex .mathquill-editable {
@@ -38,9 +38,9 @@
 }
 .mathquill-editable.hasCursor,
 .mathquill-editable .hasCursor {
-  -webkit-box-shadow: #68b4df 0 0 3px 2px;
+  /* -webkit-box-shadow: #68b4df 0 0 3px 2px;
   -moz-box-shadow: #68b4df 0 0 3px 2px;
-  box-shadow: #68b4df 0 0 3px 2px;
+  box-shadow: #68b4df 0 0 3px 2px; */
 }
 .mathquill-editable .latex-command-input {
   color: inherit;
