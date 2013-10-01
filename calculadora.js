@@ -21,7 +21,7 @@ var Calc = function(expr, infix) {
   var OpPrecedence = function(op) {
     if (typeof op == "undefined") return 0;
 
-    return op.match(/^(floor|ceil|(sin|cos|tan|sec|csc|cot)h?)$/) ? 10
+    return op.match(/^(floor|ceil|(sin|cos|tan|sec|csc|cot|sqrt)h?)$/) ? 10
 
          : (op === "^") ? 9
          : (op === "*" || op === "/") ? 8
@@ -31,7 +31,7 @@ var Calc = function(expr, infix) {
   }
 
   var OpAssociativity = function(op) {
-    return op.match(/^(floor|ceil|(sin|cos|tan|sec|csc|cot)h?)$/) ? "R" : "L";
+    return op.match(/^(floor|ceil|(sin|cos|tan|sec|csc|cot|sqrt)h?)$/) ? "R" : "L";
   }
 
   var numArgs = function(op) {
@@ -209,7 +209,9 @@ Calc.prototype.eval = function(x) {
         case "ceil":
           stack.push(Math.ceil(args[0]));
           break;
-
+        case "sqrt":
+          stack.push(Math.sqrt(args[0]));
+          break;
         default:
           // unknown operator; error out
           return false;
@@ -236,8 +238,8 @@ Calc.prototype.latexToInfix = function(latex) {
     .replace(/\\frac{([^}]+)}{([^}]+)}/g, "($1)/($2)") // fractions
     .replace(/\\left\(/g, "(") // open parenthesis
     .replace(/\\right\)/g, ")") // close parenthesis
-    .replace(/[^\(](floor|ceil|(sin|cos|tan|sec|csc|cot)h?)\(([^\(\)]+)\)[^\)]/g, "($&)") // functions
-    .replace(/([^(floor|ceil|(sin|cos|tan|sec|csc|cot)h?|\+|\-|\*|\/)])\(/g, "$1*(")
+    .replace(/[^\(](floor|ceil|(sin|cos|tan|sec|csc|cot|sqrt)h?)\(([^\(\)]+)\)[^\)]/g, "($&)") // functions
+    .replace(/([^(floor|ceil|(sin|cos|tan|sec|csc|cot|sqrt)h?|\+|\-|\*|\/)])\(/g, "$1*(")
     .replace(/\)([\w])/g, ")*$1")
     .replace(/([0-9])([A-Za-z])/g, "$1*$2")
   ;

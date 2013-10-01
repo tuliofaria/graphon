@@ -19,6 +19,7 @@
 
   <body>
   <script src="jquery/jquery-1.10.2.min.js"></script>
+  <script src="paper/paper-full.min.js"></script>
   <script src="calculadora.js"></script>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -43,15 +44,36 @@
     <div class="container">
       <span class="mathquill-editable" id="bla">x^2</span>
       <input type="text" id="idx"/>
+
+      <div class="row-fluid">
+        <div class="span5">
+          Coluna 1
+        </div>
+        <div class="span7">
+          <canvas id="grafico" resize keepalive="true" width="400" height="400"></canvas>
+        </div>
+      </div>
+
       <script>
 
         $(function(){
+
+          var canvas = document.getElementById("grafico");
+          paper.setup(canvas);
+
+          for(var i=0; i<20; i++){
+            var path = new paper.Path.Line({from: [0,i*20], to: [400,i*20]});
+            path.strokeColor = "black";
+            var path = new paper.Path.Line({from: [i*20,0], to: [i*20,400]});
+            path.strokeColor = "black";
+          }
+          paper.view.draw();
 
           $("#btn").click(function(){
                 var latex = $("#bla").mathquill('latex');
                 var calc = new Calc(latex);
                 var x = parseFloat($("#idx").val());
-                var test = calc.eval(x,x);
+                var test = calc.eval(x);
             alert(test);
           });
         });
