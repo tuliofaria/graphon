@@ -18,7 +18,8 @@
   </head>
 
   <body>
-
+  <script src="jquery/jquery-1.10.2.min.js"></script>
+  <script src="calculadora.js"></script>
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -40,13 +41,39 @@
     </div>
 
     <div class="container">
-      <span class="mathquill-editable">f(x)=?</span>
+      <span class="mathquill-editable" id="bla">x^2</span>
+      <input type="text" id="idx"/>
+      <script>
+
+        $(function(){
+
+          $("#btn").click(function(){
+                var latex = $("#bla").mathquill('latex');
+                var calc = new Calc(latex);
+                var x = parseFloat($("#idx").val());
+                var test = calc.eval(x,x);
+            alert(test);
+          });
+        });
+
+        var latex = "e^x+\\frac{2}{3}x-4sin\\left(x\\right)";
+        var calc = new Calc(latex);
+        var test = calc.eval(3.5);
+      </script>
+
+      <button id="btn">MOSTRAR</button>
+
+
     </div> <!-- /container -->
+   
+
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="jquery/jquery-1.10.2.min.js"></script>
+    
+
+
     <script src="mathquill/mathquill.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
   </body>
