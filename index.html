@@ -43,14 +43,11 @@
 
     <div class="container">
       <span class="mathquill-editable" id="bla">x^2</span>
-      <input type="text" id="idx"/>
+      <input type="text" id="idx"/><button id="btn">MOSTRAR</button>
 
       <div class="row-fluid">
-        <div class="span5">
-          Coluna 1
-        </div>
-        <div class="span7">
-          <canvas id="grafico" resize keepalive="true" width="400" height="400"></canvas>
+        <div class="span12">
+          <canvas id="grafico" resize keepalive="true"></canvas>
         </div>
       </div>
 
@@ -60,37 +57,41 @@
 
           var canvas = document.getElementById("grafico");
           paper.setup(canvas);
-
-          for(var i=0; i<20; i++){
-            var path = new paper.Path.Line({from: [0,i*20], to: [400,i*20]});
+          //alert(canvas.width);
+          //alert(canvas.height);
+          var h = canvas.height;
+          var w = canvas.width;
+          for(var i=0; i<w; i++){
+            var path = new paper.Path.Line({from: [0,i*20], to: [w,i*20]});
             path.strokeColor = "#EDEDED";
-            var path = new paper.Path.Line({from: [i*20,0], to: [i*20,400]});
+          }
+          for(var i=0; i<h; i++){
+            var path = new paper.Path.Line({from: [i*20,0], to: [i*20,h]});
             path.strokeColor = "#EDEDED";
           }
           paper.view.draw();
-
+          
+          var path = new paper.Path();
+          path.strokeColor = "black";
+          
           $("#btn").click(function(){
                 var latex = $("#bla").mathquill('latex');
                 var calc = new Calc(latex);
-                //var x = parseFloat($("#idx").val());
-
-                var path = new paper.Path();
-                path.strokeColor = "black";
 
                 for(var i=-50; i<50; i++){
-                  var test = calc.eval(i);
-                  path.add(new paper.Point(i+50, test));
+                  var y = calc.eval(i);
+                  path.add(new paper.Point(i+200, y));
                 }
                 //alert(test);
           });
         });
 
-        var latex = "e^x+\\frac{2}{3}x-4sin\\left(x\\right)";
-        var calc = new Calc(latex);
-        var test = calc.eval(3.5);
+        //var latex = "e^x+\\frac{2}{3}x-4sin\\left(x\\right)";
+        //var calc = new Calc(latex);
+        //var test = calc.eval(3.5);
       </script>
 
-      <button id="btn">MOSTRAR</button>
+      
 
 
     </div> <!-- /container -->
