@@ -63,18 +63,25 @@
 
           for(var i=0; i<20; i++){
             var path = new paper.Path.Line({from: [0,i*20], to: [400,i*20]});
-            path.strokeColor = "black";
+            path.strokeColor = "#EDEDED";
             var path = new paper.Path.Line({from: [i*20,0], to: [i*20,400]});
-            path.strokeColor = "black";
+            path.strokeColor = "#EDEDED";
           }
           paper.view.draw();
 
           $("#btn").click(function(){
                 var latex = $("#bla").mathquill('latex');
                 var calc = new Calc(latex);
-                var x = parseFloat($("#idx").val());
-                var test = calc.eval(x);
-            alert(test);
+                //var x = parseFloat($("#idx").val());
+
+                var path = new paper.Path();
+                path.strokeColor = "black";
+
+                for(var i=-50; i<50; i++){
+                  var test = calc.eval(i);
+                  path.add(new paper.Point(i+50, test));
+                }
+                //alert(test);
           });
         });
 
