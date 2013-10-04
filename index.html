@@ -12,7 +12,7 @@
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
   </head>
 
-  <body ng-controller="MainCtrl">
+  <body ng-controller="MainCtrl" id="MainCtrl">
   <script src="jquery/jquery-1.10.2.min.js"></script>
   <script src="paper/paper-full.min.js"></script>
   <script src="calculadora.js"></script>
@@ -68,6 +68,19 @@
           var path = new paper.Path();
           path.strokeColor = "black";
           
+          var latexMath = $("#bla");
+          
+          latexMath.bind('keydown keypress', function() {
+            setTimeout(function() {
+              var latex = latexMath.mathquill('latex');
+              //console.log(latex);
+              
+              
+              var scope = angular.element($("#MainCtrl")).scope();
+              scope.updateParams();
+            });
+          }).keydown().focus();
+
           $("#btn").click(function(){
                 var latex = $("#bla").mathquill('latex');
                 console.log(latex);

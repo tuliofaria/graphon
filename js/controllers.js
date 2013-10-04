@@ -16,6 +16,7 @@ function MainCtrl($scope){
         		};
         	}
         });
+        $scope.$apply();
         //$scope.parameters = calc.params();
 	}
 }
