@@ -16,6 +16,18 @@
           box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
 
 }
+body{
+  background: url(triangular.png);
+}
+.equation{
+  margin: 5px;
+  padding: 10px;
+  padding: 1px solid #EDEDED;
+  background: white;
+}
+.teste{
+  font-family: Symbola;
+}
 
 .header .container {
   position: relative;

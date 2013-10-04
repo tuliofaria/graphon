@@ -30,7 +30,6 @@
 }
 .mathquill-editable,
 .mathquill-embedded-latex .mathquill-editable {
-  border: 1px solid black;
   padding: 2px;
 }
 .mathquill-embedded-latex .mathquill-editable {

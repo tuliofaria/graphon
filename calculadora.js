@@ -115,6 +115,33 @@ var Calc = function(expr, infix) {
   }
 }
 
+Calc.prototype.params = function() {
+  var stack = [], rpn_expr = this.rpn_expr;
+  var params = [];
+
+  rpn_expr.forEach(function(token) {
+
+    if (typeof token[0] == "string") {
+      switch (token[0]) {
+        case "var":
+          //console.log(x);
+          // Variable, i.e. x as in f(x); push value onto stack
+          //if (token[1] != "x") return false;
+          //stack.push(x[token[1]]);
+          params.push(token[1]);
+          break;
+
+        case "num":
+          // Number; push value onto stack
+          stack.push(token[1]);
+          break;
+      }
+    }
+  });
+
+  return params;
+};
+
 /**
  * returns the result of evaluating the current expression
  */
@@ -122,12 +149,14 @@ Calc.prototype.eval = function(x) {
   var stack = [], rpn_expr = this.rpn_expr;
 
   rpn_expr.forEach(function(token) {
+
     if (typeof token[0] == "string") {
       switch (token[0]) {
         case "var":
+          console.log(x);
           // Variable, i.e. x as in f(x); push value onto stack
           //if (token[1] != "x") return false;
-          stack.push(x);
+          stack.push(x[token[1]]);
           break;
 
         case "num":
