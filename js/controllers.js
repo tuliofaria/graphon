@@ -13,7 +13,7 @@ function MainCtrl($scope){
                         			name: value,
                         			starting: 0,
                         			ending: 50,
-                                                currentValue: 0
+                                                currentValue: 25
                         		};
                         	}
                         }

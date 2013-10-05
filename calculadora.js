@@ -49,7 +49,8 @@ var Calc = function(expr, infix) {
   // This nice long regex matches any valid token in a user
   // supplied expression (e.g. an operator, a constant or
   // a variable)
-  var in_tokens = this.expr.match(/(\^|\*|\/|\+|\-|\(|\)|[a-zA-Z0-9\.]+)/gi);
+  //var in_tokens = this.expr.match(/(\^|\*|\/|\+|\-|\(|\)|[a-zA-Z0-9\.]+)/gi);
+  var in_tokens = this.expr.match(/(\^|\*|\/|\+|\-|\(|\)|[a-zA-Z\.]|[0-9]+)/gi);
   var op_stack = [];
 
   in_tokens.forEach(function(token) {
@@ -120,7 +121,6 @@ Calc.prototype.params = function() {
   var params = [];
 
   rpn_expr.forEach(function(token) {
-
     if (typeof token[0] == "string") {
       switch (token[0]) {
         case "var":
@@ -271,6 +271,8 @@ Calc.prototype.latexToInfix = function(latex) {
     .replace(/([^(floor|ceil|(sin|cos|tan|sec|csc|cot|sqrt)h?|\+|\-|\*|\/)])\(/g, "$1*(")
     .replace(/\)([\w])/g, ")*$1")
     .replace(/([0-9])([A-Za-z])/g, "$1*$2")
+    .replace(/([A-Za-z])([0-9])/g, "$1*$2")
+    .replace(/([A-Za-z])([A-Za-z])/g, "$1*$2")
   ;
 
   return infix;

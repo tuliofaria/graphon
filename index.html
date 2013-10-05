@@ -58,31 +58,46 @@
       </div>
 
       <script>
+        var canvas = document.getElementById("grafico");
+        var grid;
+        var tool;
 
         $(function(){
-
-          var canvas = document.getElementById("grafico");
+  
           paper.setup(canvas);
+          tool = new paper.Tool()
+          tool.activate();
+          grid = new paper.Group();
 
           var h = canvas.height;
           var w = canvas.width;
           for(var i=0; i<w; i++){
             var path = new paper.Path.Line({from: [0,i*20], to: [w,i*20]});
-            path.strokeColor = "#EDEDED";
+            if(i%5==0){
+              path.strokeColor = "#666666";
+            }else{
+              path.strokeColor = "#EDEDED";
+            }
+            grid.addChild(path);
           }
           for(var i=0; i<h; i++){
             var path = new paper.Path.Line({from: [i*20,0], to: [i*20,h]});
-            path.strokeColor = "#EDEDED";
+            if(i%5==0){
+              path.strokeColor = "#666666";
+            }else{
+              path.strokeColor = "#EDEDED";
+            }
+            grid.addChild(path);
           }
           var path = new paper.Path.Line({from: [0,h/2], to: [w,h/2]});
           path.strokeColor = "#FF0000";
+          grid.addChild(path);
           var path = new paper.Path.Line({from: [w/2,0], to: [w/2,h]});
           path.strokeColor = "#FF0000";
+          grid.addChild(path);
 
           paper.view.draw();
           
-          var path = new paper.Path();
-          path.strokeColor = "black";
           
           var latexMath = $("#bla");
           latexMath.bind('keydown keypress', function() {
@@ -93,21 +108,59 @@
             });
           }).keydown().focus();
           $(".equation").click(function(){
-            console.log('focus qdo clicar na caixa');
+            //console.log('focus qdo clicar na caixa');
           })
 
           $("#btn").click(function(){
-                var latex = $("#bla").mathquill('latex');
-                var calc = new Calc(latex);
-
-                for(var i=(w/2)*-1; i<w/2; i+=2){
-                  var p = { x: i };
-                  var y = calc.eval(p)+(h/2);
-                  path.add(new paper.Point(i+(w/2), y));
-                }
-                paper.view.draw();
+            drawChart();
           });
+
+          //var red = new paper.Path.Line({from: [w/2,0], to: [w/2,h]});
+          //red.strokeColor = "#FF0000";
+          paper.view.onFrame = function(event) { 
+            /*for (var i = 0; i < len; i++) { 
+                var item = project.activeLayer.children[i]; 
+                item.rotate(3); 
+            } */
+            //red.rotate(3);
+            //console.log("v"+event.time);
+            drawChart();
+          }
+          tool.onMouseDrag = function(event) {
+
+          }
+
         });
+        
+        var chart = null; 
+        //path.visible = false;
+        function drawChart(){
+          if(chart==null){
+            chart = new paper.Path();
+            chart.strokeColor = "black";
+            /*for(var i=(w/2)*-1; i<w/2; i+=2){
+                path.add(new paper.Point(0, 0));
+            }*/
+          }
+
+          var t = chart.segments.length;
+          console.log(t);
+
+          var h = canvas.height;
+          var w = canvas.width;
+          
+          var latex = $("#bla").mathquill('latex');
+          var calc = new Calc(latex);
+          chart.clean();
+          for(var i=(w/2)*-1; i<w/2; i+=2){
+            var p = { x: i };
+            var y = calc.eval(p)+(h/2);
+            chart.add(new paper.Point(i+(w/2), y));
+            //console.log(t);
+          }
+          paper.view.draw();
+        }
+
       </script>
 
     </div> 
