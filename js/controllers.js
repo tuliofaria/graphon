@@ -7,15 +7,16 @@ function MainCtrl($scope){
                 var calc = new Calc(latex);
                 var ps = calc.params();
                 angular.forEach(ps, function(value, key){
-                	console.log(value);
-                	if(!(value in $scope.parameters)){
-                		$scope.parameters[value] = {
-                			name: value,
-                			starting: 1,
-                			ending: 10,
-                                        currentValue: 0
-                		};
-                	}
+                	if(value!="x"){
+                        	if(!(value in $scope.parameters)){
+                        		$scope.parameters[value] = {
+                        			name: value,
+                        			starting: 0,
+                        			ending: 50,
+                                                currentValue: 0
+                        		};
+                        	}
+                        }
                 });
                 angular.forEach($scope.parameters, function(value, key){
                         if(ps.indexOf(value.name)<0){

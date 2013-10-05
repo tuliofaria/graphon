@@ -1,4 +1,4 @@
-var graphonApp = angular.module('graphon', ['ui.bootstrap']);//, ['graphonServices', 'ui']);
+var graphonApp = angular.module('graphon', ['ui.slider']);//, ['graphonServices', 'ui']);
 
 /*graphonApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
