@@ -14,9 +14,14 @@ body{
 }
 .equation{
   margin: 5px;
-  padding: 10px;
+  padding: 10px 10px 10px 80px;
   padding: 1px solid #EDEDED;
-  background: white;
+  background: white url(img/formula.png) 10px center no-repeat;
+  border: 1px solid #0F0F0F;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020031', endColorstr='#6d3353',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+          box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
 }
 .teste{
   font-family: Symbola;

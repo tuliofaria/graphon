@@ -3,20 +3,26 @@ function MainCtrl($scope){
 	}
 
 	$scope.updateParams = function(){
-		var latex = $("#bla").mathquill('latex');
-        var calc = new Calc(latex);
-        var ps = calc.params();
-        angular.forEach(ps, function(value, key){
-        	console.log(value);
-        	if(!(value in $scope.parameters)){
-        		$scope.parameters[value] = {
-        			name: value,
-        			starting: 1,
-        			ending: 10
-        		};
-        	}
-        });
-        $scope.$apply();
-        //$scope.parameters = calc.params();
+        	var latex = $("#bla").mathquill('latex');
+                var calc = new Calc(latex);
+                var ps = calc.params();
+                angular.forEach(ps, function(value, key){
+                	console.log(value);
+                	if(!(value in $scope.parameters)){
+                		$scope.parameters[value] = {
+                			name: value,
+                			starting: 1,
+                			ending: 10,
+                                        currentValue: 0
+                		};
+                	}
+                });
+                angular.forEach($scope.parameters, function(value, key){
+                        if(ps.indexOf(value.name)<0){
+                                delete $scope.parameters[key];
+                        }
+                });
+                $scope.$apply();
+                //$scope.parameters = calc.params();
 	}
 }

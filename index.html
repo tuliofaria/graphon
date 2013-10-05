@@ -14,6 +14,7 @@
 
   <body ng-controller="MainCtrl" id="MainCtrl">
   <script src="jquery/jquery-1.10.2.min.js"></script>
+  <script src="js/jquery.ui.js"></script>
   <script src="paper/paper-full.min.js"></script>
   <script src="calculadora.js"></script>
     <div class="header">
@@ -25,12 +26,14 @@
         <div class="mathquill-editable" id="bla">x^2</div>
       </div>
       <button id="btn" class="btn">MOSTRAR</button>
-      <button ng-click="updateParams()" class="btn btn-info">Mostrar parâmetros</button>
+      
 
       <div class="row-fluid">
         <div class="span2">
-            <div class="well teste" ng-repeat="p in parameters"><b>{{p.name}}</b><br>
-              De: {{p.starting}} a: {{p.ending}}</div>
+            <div class="well" ng-repeat="p in parameters"><b>{{p.name}}</b><br>
+              De: {{p.starting}} a: {{p.ending}}
+              <div ui-slider min="0" max="50" ng-model="p.currentValue"></div>
+            </div>
             <div>
               <button class="btn">Animar parâmetros</button>
             </div>
@@ -46,8 +49,7 @@
 
           var canvas = document.getElementById("grafico");
           paper.setup(canvas);
-          //alert(canvas.width);
-          //alert(canvas.height);
+
           var h = canvas.height;
           var w = canvas.width;
           for(var i=0; i<w; i++){
@@ -69,21 +71,19 @@
           path.strokeColor = "black";
           
           var latexMath = $("#bla");
-          
           latexMath.bind('keydown keypress', function() {
             setTimeout(function() {
               var latex = latexMath.mathquill('latex');
-              //console.log(latex);
-              
-              
               var scope = angular.element($("#MainCtrl")).scope();
               scope.updateParams();
             });
           }).keydown().focus();
+          $(".equation").click(function(){
+            console.log('focus qdo clicar na caixa');
+          })
 
           $("#btn").click(function(){
                 var latex = $("#bla").mathquill('latex');
-                console.log(latex);
                 var calc = new Calc(latex);
 
                 for(var i=(w/2)*-1; i<w/2; i+=2){
@@ -91,28 +91,12 @@
                   var y = calc.eval(p)+(h/2);
                   path.add(new paper.Point(i+(w/2), y));
                 }
-                //alert(test);
                 paper.view.draw();
           });
         });
-
-        //var latex = "e^x+\\frac{2}{3}x-4sin\\left(x\\right)";
-        //var calc = new Calc(latex);
-        //var test = calc.eval(3.5);
       </script>
 
-      
-
-
-    </div> <!-- /container -->
-   
-
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    
-
+    </div> 
 
     <script src="mathquill/mathquill.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -121,5 +105,7 @@
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
     <script src="js/angular-resource.js"></script>
+    <script src="js/uibootstrap.js"></script>
+    <script src="js/slider.js"></script>
   </body>
 </html>
