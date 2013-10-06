@@ -153,7 +153,7 @@ Calc.prototype.eval = function(x) {
     if (typeof token[0] == "string") {
       switch (token[0]) {
         case "var":
-          console.log(x);
+          //console.log(x);
           // Variable, i.e. x as in f(x); push value onto stack
           //if (token[1] != "x") return false;
           stack.push(x[token[1]]);
@@ -274,6 +274,6 @@ Calc.prototype.latexToInfix = function(latex) {
     .replace(/([A-Za-z])([0-9])/g, "$1*$2")
     .replace(/([A-Za-z])([A-Za-z])/g, "$1*$2")
   ;
-
+  //console.log(infix);
   return infix;
 };
