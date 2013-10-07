@@ -38,15 +38,15 @@ function MainCtrl($scope){
 
                     var points = [];
 
-                    for(var i=(0-(cartesianSize/2))*scale; i<((cartesianSize/2))*scale; i+=1*scale){
+                    for(var i=(0-(cartesianSize/2)); i<((cartesianSize/2)); i+=1*scale){
                       //console.log(i+"/"+toCartX(i));
                       points.push(toCartX(i));
                       ps = {};
-                      ps.x = i;
+                      ps.x = i*scale;
                       angular.forEach($scope.parameters, function(value, key){
                         ps[value.name] = value.currentValue;
                       });
-                      points.push(toCartY(calc.eval(ps)));
+                      points.push(toCartY(calc.eval(ps)/scale));
                       
                     }
                     if(grafico!=null){
