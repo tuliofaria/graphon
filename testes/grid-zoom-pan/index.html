@@ -36,7 +36,7 @@
         <h1><img src="../../css/logo.png" title="MathMagic" /><img class="pull-right" src="../../css/aprendee.png" style="margin: 0 20px 0 0" /></h1>
     </div>
 
-    <div class="container">
+    <div class="toolbar">
       <div class="equation">
         <div class="mathquill-editable" id="bla">x^2</div>
       </div>
@@ -54,16 +54,55 @@
               <div id="y"></div>
             </div>
         </div>
-        <div class="span10">
-          <div id="grafico" resize keepalive="true" style="cursor: move;"></div>
+      </div>
+    </div>
+    <div id="grafico" style="cursor: move;"></div>
+    
+    <div class="keyboardcontainer" id="keyboardcontainer">
+      <div class="toggleBtn" id="toggleBtn">
+      <button class="btn" id="buttonToggleShow" onClick="$('#keyboardcontainer').show(); $('#toggleBtn').hide();"><img src="css/img/input-keyboard.png"></img></button>
+    </div>
+      <div class="row-fluid">
+        <div class="offset1 span2">
+          <button class="btn btn-large" id="buttonToggleHide" onClick="$('#keyboardcontainer').hide();$('#toggleBtn').show();">Hide</button>
+        </div>  
+        <div class="span3">
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','7');">7</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','8');">8</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">9</span>  
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','*');">×</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','4');">4</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','5');">5</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">6</span> 
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','+');">+</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','1');">1</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','2');">2</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','3');">3</span> 
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','-');">-</span>  
+              <span class="keyboard number numberzero" onClick="$('#bla').mathquill('write','9');">0</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">.</span>  
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','/');">÷</span>
+        </div>
+        <div class="span3">
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','^2');">a<sup>2</sup></span>
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\sqrt');">√</span>
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','x');">x</span>
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\^');">a<sup>b</sup></span>
+              <span class="keyboard symbolbackspace lastitem" onClick="alert('preguiça de terminar hoje...');">Backspace</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">Del</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8593;</span>
+              <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">&#8629;</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8592;</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8595;</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8594;</span>
         </div>
       </div>
-
+    </div><!-- Keyboardcontainer -->
       <script>
         var cartesianSize;
         var grafico;
         var graficoLayer = null;
-        var scale = 5;
+        var scale = 1/10; // 1 para 1px / 1/10
 
         function toCartX(x){
           return (cartesianSize/2)+x;
@@ -74,7 +113,7 @@
 
         $(function(){
 
-          cartesianSize = 10000;
+          cartesianSize = 3000;
           
           // desenhar grid
           var stage = new Kinetic.Stage({
@@ -93,8 +132,8 @@
           });
 
           $(window).resize(function(){
-            stage.width = $("#grafico").width();
-            
+            stage.setWidth($("#grafico").width());
+            stage.setHeight(window.innerHeight-$(".header").height()-10);
           });
 
           // desenhando o grid
@@ -119,7 +158,7 @@
               var label = new Kinetic.Text({
                 x: cartesianSize/2+5,
                 y: i+2,
-                text: (cartesianSize/2)-i+'',
+                text: ((cartesianSize/2)-i)*scale+'',
                 fontSize: 10,
                 fontFamily: 'Arial',
                 fill: '#333333',
@@ -146,7 +185,7 @@
               var label = new Kinetic.Text({
                 x: i+2,
                 y: cartesianSize/2+5,
-                text: i-(cartesianSize/2)+'',
+                text: (i-(cartesianSize/2))*scale+'',
                 fontSize: 10,
                 fontFamily: 'Arial',
                 fill: '#333333',
@@ -185,7 +224,6 @@
         
       </script>
 
-    </div> 
 
     
   </body>

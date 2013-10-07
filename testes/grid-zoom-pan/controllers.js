@@ -38,28 +38,27 @@ function MainCtrl($scope){
 
                     var points = [];
 
-                    for(var i=0-cartesianSize/2; i<cartesianSize/2; i++){
-                      points.push(toCartX(i));
+                    for(var i=0-(cartesianSize/2)/scale; i<(cartesianSize/2)/scale; i++){
+                      points.push(toCartX(i/scale));
                       ps = {};
-                      ps.x = i;
+                      ps.x = toCartX(i/scale);
                       angular.forEach($scope.parameters, function(value, key){
-                        ps[value.name] = value.currentValue;
+                        ps[value.name] = value.currentValue/scale;
                       });
-                      points.push(toCartY(calc.eval(ps)));
-
+                      points.push(toCartY(calc.eval(ps)/scale));
+                      
                     }
                     if(grafico!=null){
                       grafico.remove();
                     }
-                    //[toCartX(70+iii), toCartY(70+iii), toCartX(340), toCartY(23), 450, 60, 500, 20]
+
                     grafico = new Kinetic.Line({
                       points: points,
                       stroke: 'red',
-                      strokeWidth: 1,
+                      strokeWidth: 1.4,
                       lineCap: 'round',
                       lineJoin: 'round'
                     });
-                    //stage.add(grafico);
                     graficoLayer.add(grafico);
                     graficoLayer.draw();
                   }
