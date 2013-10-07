@@ -102,13 +102,13 @@
         var cartesianSize;
         var grafico;
         var graficoLayer = null;
-        var scale = 1/10; // 1 para 1px / 1/10
+        var scale = 1/25; // 1 para 1px / 1/10
 
         function toCartX(x){
-          return (cartesianSize/2)+x;
+          return ((cartesianSize/2)+x);
         }
         function toCartY(y){
-          return (cartesianSize/2)-y;
+          return ((cartesianSize/2)-y);
         }
 
         $(function(){

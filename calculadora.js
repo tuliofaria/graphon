@@ -52,7 +52,8 @@ var Calc = function(expr, infix) {
   //var in_tokens = this.expr.match(/(\^|\*|\/|\+|\-|\(|\)|[a-zA-Z0-9\.]+)/gi);
   var in_tokens = this.expr.match(/(\^|\*|\/|\+|\-|\(|\)|[a-zA-Z\.]|[0-9]+)/gi);
   var op_stack = [];
-
+  if(in_tokens==null)
+    return;
   in_tokens.forEach(function(token) {
     if (/^[a-zA-Z]$/.test(token)) {
       if (CALC_CONST.hasOwnProperty(token)) {
