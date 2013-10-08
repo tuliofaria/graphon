@@ -40,15 +40,13 @@
       <div class="equation">
         <div class="mathquill-editable" id="bla">x^2</div>
       </div>
-      <button id="btn" class="btn">MOSTRAR</button>
       
-      <div class="row-fluid">
-        <div class="span2">
-            <div class="well" ng-repeat="p in parameters"><b>{{p.name}} = {{p.currentValue}}</b><br>
-              De: {{p.starting}} a: {{p.ending}}
+      <div class="">
+        <div class="">
+            <div class="param" ng-repeat="p in parameters"><b>{{p.name}} = {{p.currentValue}}</b> ({{p.starting}} a {{p.ending}})<br>
               <div ui-slider min="{{p.starting}}" max="{{p.ending}}" ng-model="p.currentValue"></div>
             </div>
-            <div>
+            <div ng-show="parameters.length>0">
               <button class="btn">Animar parâmetros</button>
               <div id="x"></div>
               <div id="y"></div>

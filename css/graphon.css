@@ -15,7 +15,6 @@ body{
   height: 100%;
 }
 .equation{
-  margin: 5px;
   padding: 10px 10px 10px 80px;
   padding: 1px solid #EDEDED;
   background: white url(img/formula.png) 10px center no-repeat;
@@ -24,6 +23,7 @@ body{
   -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
      -moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
           box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+  color: black;
 }
 .teste{
   font-family: Symbola;
@@ -36,6 +36,15 @@ body{
   background: #293543;
   -webkit-box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.5);
   box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  color: white;
+}
+.toolbar .param{
+  background: #D2DAE3;
+  padding: 4px;
+  color: black;
+  font-size: 10px;
+  margin-top: 2px;
 }
 .keyboardcontainer{
   position: absolute;
