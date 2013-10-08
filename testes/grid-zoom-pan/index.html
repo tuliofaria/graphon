@@ -79,7 +79,6 @@
         $(function(){
 
           cartesianSize = 3000;
-          
           // desenhar grid
           var stage = new Kinetic.Stage({
             container: 'grafico',
@@ -188,11 +187,8 @@
         });
   
       function keyPressed(){
-        var press = jQuery.Event("keydown");
-        press.which = 69; // # The 'e' key code value
-        press.keyCode = 69;
-        alert(press);
-        $('#bla').trigger(press);
+        var scope = angular.element($("#MainCtrl")).scope();
+        scope.updateParams();
       }
       
   
@@ -205,20 +201,20 @@
         </div>  
         <div class="span3">
               <span class="keyboard number" onClick="keyPressed();">7</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','8');keyPressed();">8</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');keyPressed();">9</span>  
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','*');">×</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','4');">4</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','5');">5</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">6</span> 
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','+');">+</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','1');">1</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','2');">2</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','3');">3</span> 
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','-');">-</span>  
-              <span class="keyboard number numberzero" onClick="$('#bla').mathquill('write','9');">0</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">.</span>  
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','/');">÷</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','8'); keyPressed();">8</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9'); keyPressed();">9</span>  
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','*'); keyPressed();">×</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','4'); keyPressed();" >4</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','5'); keyPressed();">5</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9'); keyPressed();">6</span> 
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','+'); keyPressed();">+</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','1'); keyPressed();">1</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','2'); keyPressed();">2</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','3'); keyPressed();">3</span> 
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','-'); keyPressed();">-</span>  
+              <span class="keyboard number numberzero" onClick="$('#bla').mathquill('write','9'); keyPressed();">0</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9'); keyPressed();">.</span>  
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','/'); keyPressed();">÷</span>
         </div>
         <div class="span3">
               <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','^2');">a<sup>2</sup></span>
