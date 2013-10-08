@@ -58,45 +58,9 @@
     <div id="grafico" style="cursor: move;"></div>
     
     <div class="toggleBtn" id="toggleBtn">
-      <button class="btn" id="buttonToggleShow" onClick="$('#keyboardcontainer').show(); $('#toggleBtn').hide();"><img src="css/img/keyboard-img.png"></img></button>
+      <button class="btn" id="buttonToggleShow" onClick="$('#keyboardcontainer').show(); $('#toggleBtn').hide();"><img src="../../css/img/keyboard-img.png"></img></button>
     </div>
-    <span class="keyboardcontainer" id="keyboardcontainer">
-      <div class="row-fluid">
-        <div class="offset1 span2">
-          <button class="btn btn-large" id="buttonToggleHide" onClick="$('#keyboardcontainer').hide();$('#toggleBtn').show();">Hide</button>
-        </div>  
-        <div class="span3">
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','7');">7</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','8');">8</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">9</span>  
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','*');">×</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','4');">4</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','5');">5</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">6</span> 
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','+');">+</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','1');">1</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','2');">2</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','3');">3</span> 
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','-');">-</span>  
-              <span class="keyboard number numberzero" onClick="$('#bla').mathquill('write','9');">0</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">.</span>  
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','/');">÷</span>
-        </div>
-        <div class="span3">
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','^2');">a<sup>2</sup></span>
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\sqrt');">√</span>
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','x');">x</span>
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\^');">a<sup>b</sup></span>
-              <span class="keyboard symbolbackspace lastitem" onClick="alert('preguiça de terminar hoje...');">Backspace</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">Del</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8593;</span>
-              <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">&#8629;</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8592;</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8595;</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8594;</span>
-        </div>
-      </div>
-    </div><!-- Keyboardcontainer -->
+    
       <script>
         var cartesianSize;
         var grafico;
@@ -113,7 +77,6 @@
         $(function(){
 
           cartesianSize = 3000;
-          
           // desenhar grid
           var stage = new Kinetic.Stage({
             container: 'grafico',
@@ -213,9 +176,49 @@
             });
           }).keydown().focus();
         });
-        
+  
+      function keyPressed(){
+        var scope = angular.element($("#MainCtrl")).scope();
+        scope.updateParams();
+      }
       </script>
-
+<span class="keyboardcontainer" id="keyboardcontainer">
+      <div class="row-fluid">
+        <div class="offset1 span2">
+          <button class="btn btn-large" id="buttonToggleHide" onClick="$('#keyboardcontainer').hide();$('#toggleBtn').show();">Hide</button>
+        </div>  
+        <div class="span3">
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','8'); keyPressed();">7</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','8'); keyPressed();">8</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9'); keyPressed();">9</span>  
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','*'); keyPressed();">×</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','4'); keyPressed();" >4</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','5'); keyPressed();">5</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9'); keyPressed();">6</span> 
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','+'); keyPressed();">+</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','1'); keyPressed();">1</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','2'); keyPressed();">2</span>
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','3'); keyPressed();">3</span> 
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','-'); keyPressed();">-</span>  
+              <span class="keyboard number numberzero" onClick="$('#bla').mathquill('write','9'); keyPressed();">0</span>  
+              <span class="keyboard number" onClick="$('#bla').mathquill('write','9'); keyPressed();">.</span>  
+              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','/'); keyPressed();">÷</span>
+        </div>
+        <div class="span3">
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','^2'); keyPressed();">a<sup>2</sup></span>
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\sqrt'); keyPressed();">√</span>
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','x'); keyPressed();">x</span>
+              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\^'); keyPressed();">a<sup>b</sup></span>
+              <span class="keyboard symbolbackspace lastitem" onClick="alert('preguiça de terminar hoje...');">Backspace</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">Del</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8593;</span>
+              <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">&#8629;</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8592;</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8595;</span>
+              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8594;</span>
+        </div>
+      </div>
+    </div><!-- Keyboardcontainer -->
 
     
   </body>
