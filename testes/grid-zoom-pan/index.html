@@ -31,8 +31,6 @@
   </head>
 
   <body ng-controller="MainCtrl" id="MainCtrl">
-  
-
     <div class="header">
         <h1><img src="../../css/logo.png" title="MathMagic" /><img class="pull-right" src="../../css/aprendee.png" style="margin: 0 20px 0 0" /></h1>
     </div>
@@ -54,6 +52,7 @@
             </div>
         </div>
       </div>
+      <div id="t"></div>
     </div>
     <div id="grafico" style="cursor: move;"></div>
     
@@ -65,7 +64,14 @@
         var cartesianSize;
         var grafico;
         var graficoLayer = null;
+        var gridLayer = null;
+        var gridLinesV = [];
+        var gridLinesH = [];
         var scale = 1/25; // 1 para 1px / 1/10
+        var stage = null;
+        var viewportHeight = 400;
+        var viewportWidth = 400;
+        var overflowSize = 50; // 50px a mais em cada direcao do viewport
 
         function toCartX(x){
           return ((cartesianSize/2)+x);
@@ -78,31 +84,84 @@
 
           cartesianSize = 3000;
           // desenhar grid
-          var stage = new Kinetic.Stage({
+          stage = new Kinetic.Stage({
             container: 'grafico',
-            width: $("#grafico").width(),
-            height: 500,
-            draggable: true,
-            dragBoundFunc: function(pos) {
-              var newY = pos.y > 1 ? 1 : (pos.y<$("#grafico").height()-cartesianSize) ? $("#grafico").height()-cartesianSize-1 : pos.y;
-              var newX = pos.x > 1 ? 1 : (pos.x<$("#grafico").width()-cartesianSize) ? $("#grafico").width()-cartesianSize-1 : pos.x;
-              return {
-                x: newX,
-                y: newY
-              };
-          }
+            width: viewportWidth,
+            height: viewportHeight,
+            draggable: true
+          });
+          stage.on('dragmove', function(ev){
+            var absPos = stage.getAbsolutePosition();
+            
+            if(absPos.y>0){
+              // comeca a redesenhar
+              //$("#t").html(absPos.x+":"+absPos.y);
+              //gridLinesH[i].setAttr("y", absPos.y%viewportHeight);
+              $("#t").html("VP"+viewportHeight+"/"+absPos.y+"/Stage"+stage.getAttr("height"));
+              for(var i = 0; i<gridLinesH.length; i++){
+                if(gridLinesH[i].getAttr("y")>(viewportHeight-absPos.y)){
+                  gridLinesH[i].setAttr("y", 0);
+                }
+                gridLinesH[i].setAttr("x", 0-absPos.x); // ok
+              }
+            }else{
+              for(var i = 0; i<gridLinesH.length; i++){
+                gridLinesH[i].setAttr("x", 0-absPos.x); // ok
+              }
+            }
+            //$("#t").html(ev.target.getAttr("x")+":"+ev.target.getAttr("y"));
           });
 
+          // quando redimensiona
           $(window).resize(function(){
-            stage.setWidth($("#grafico").width());
-            stage.setHeight(window.innerHeight-$(".header").height()-10);
+            calcCanvasSize();
+
+            // TODO: redraw
+            drawGrid();
           });
 
           // desenhando o grid
-          var gridLayer = new Kinetic.Layer();
+          gridLayer = new Kinetic.Layer();
           graficoLayer = new Kinetic.Layer();
 
-          for(var i=0; i<=cartesianSize; i+=20){
+          // add the layer to the stage
+          stage.add(gridLayer);
+          stage.add(graficoLayer);
+
+          calcCanvasSize();
+          drawGrid();
+          
+          // centralizando o grafico
+          stage.attrs.x = ($("#grafico").width()-viewportWidth)/2;
+          stage.attrs.y = ($("#grafico").height()-viewportHeight)/2;
+
+          
+
+          var latexMath = $("#bla");
+          latexMath.bind('keydown keypress', function() {
+            setTimeout(function() {
+              var latex = latexMath.mathquill('latex');
+              var scope = angular.element($("#MainCtrl")).scope();
+              $("#x").html(latex);
+              scope.updateParams();
+              //drawFunction();
+            });
+          }).keydown().focus();
+        });
+  
+      function calcCanvasSize(){
+        //stage.setWidth($("#grafico").width());
+        //stage.setHeight(window.innerHeight-$(".header").height()-10);
+
+        //viewportWidth = $("#grafico").width();
+        //viewportHeight = window.innerHeight-$(".header").height()-10;
+      }
+      function drawGrid(){
+        //console.log(stage.attrs.x);
+        //for(var i=0; i<=cartesianSize; i+=20){
+        // verticais
+        //alert(viewportWidth+overflowSize*2+"/"+viewportWidth);
+        for(var i=0; i<=viewportHeight+overflowSize*2; i+=20){
             var color = '#999999';
             if(i==cartesianSize/2){
               color = 'red';
@@ -110,11 +169,12 @@
               color = '#333333';
             }
             var line = new Kinetic.Line({
-              points: [0, i, cartesianSize, i],
+              points: [0, i, viewportWidth+overflowSize*2, i],
               stroke: color,
               strokeWidth: 0.5
             });
             gridLayer.add(line);
+            gridLinesH.push(line);
 
             if((i!=cartesianSize/2)&&(i%100==0)){
               var label = new Kinetic.Text({
@@ -129,7 +189,8 @@
               gridLayer.add(label);
             }
           }
-          for(var i=0; i<=cartesianSize; i+=20){
+          // horizontais
+          for(var i=0; i<=viewportWidth+overflowSize*2; i+=20){
             var color = '#999999';
             if(i==cartesianSize/2){
               color = 'red';
@@ -137,11 +198,11 @@
               color = '#333333';
             }
             var line = new Kinetic.Line({
-              points: [i, 0, i,cartesianSize],
+              points: [i, 0, i, viewportHeight+overflowSize*2],
               stroke: color,
               strokeWidth: 0.5
             });
-            gridLayer.add(line);
+            //gridLayer.add(line);
 
             if(i%100==0){
               var label = new Kinetic.Text({
@@ -155,28 +216,10 @@
               });
               gridLayer.add(label);
             }
-
           }
-          // centralizando o grafico
-          stage.attrs.x = ($("#grafico").width()-cartesianSize)/2;
-          stage.attrs.y = ($("#grafico").height()-cartesianSize)/2;
+          gridLayer.draw();
+      }
 
-          // add the layer to the stage
-          stage.add(gridLayer);
-          stage.add(graficoLayer);
-
-          var latexMath = $("#bla");
-          latexMath.bind('keydown keypress', function() {
-            setTimeout(function() {
-              var latex = latexMath.mathquill('latex');
-              var scope = angular.element($("#MainCtrl")).scope();
-              $("#x").html(latex);
-              scope.updateParams();
-              //drawFunction();
-            });
-          }).keydown().focus();
-        });
-  
       function keyPressed(){
         var scope = angular.element($("#MainCtrl")).scope();
         scope.updateParams();
