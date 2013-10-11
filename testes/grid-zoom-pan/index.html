@@ -69,8 +69,8 @@
         var gridLinesH = [];
         var scale = 1/25; // 1 para 1px / 1/10
         var stage = null;
-        var viewportHeight = 400;
-        var viewportWidth = 400;
+        var viewportHeight = 300;
+        var viewportWidth = 300;
         var overflowSize = 50; // 50px a mais em cada direcao do viewport
 
         var h1 = null;
@@ -108,7 +108,7 @@
 
             if(true){
               // comeca a redesenhar
-              gridLinesH[gridLinesH.length-1].img.setPosition(0, 0-gridLinesH[gridLinesH.length-1].y-50);
+              //gridLinesH[gridLinesH.length-1].img.setPosition(40, 0-gridLinesH[gridLinesH.length-1].y-50);
               $("#t").html(absPos.y+":"+absPos.y+"//"+gridLayer.getAttr("y"));
               //gridLinesH[i].setAttr("y", absPos.y%viewportHeight);
 
@@ -183,10 +183,19 @@
             }else if(i%100==0){
               color = '#333333';
             }
-            var line = new Kinetic.Line({
+            /*var line = new Kinetic.Line({
               points: [0, i, viewportWidth+overflowSize*2, i],
               stroke: color,
               strokeWidth: 0.5
+            });*/
+            var line = new Kinetic.Text({
+                x: 40,
+                y: i,
+                text: i+'',
+                fontSize: 10,
+                fontFamily: 'Arial',
+                fill: '#333333',
+                align: 'center'
             });
             gridLayer.add(line);
             gridLinesH.push(
@@ -221,7 +230,7 @@
               stroke: color,
               strokeWidth: 0.5
             });
-            gridLayer.add(line);
+            //gridLayer.add(line);
 
             if(i%100==0){
               var label = new Kinetic.Text({
