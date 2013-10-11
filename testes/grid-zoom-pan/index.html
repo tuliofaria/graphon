@@ -100,16 +100,30 @@
             // descobrir onde estão a primeira e ultima linhas
             gridLayer.draw();
 
-            // onde está, onde deveria estar
-            // onde está
-            //absPos.y;
-
             
 
             if(true){
               // comeca a redesenhar
               //gridLinesH[gridLinesH.length-1].img.setPosition(40, 0-gridLinesH[gridLinesH.length-1].y-50);
-              $("#t").html(absPos.y+":"+absPos.y+"//"+gridLayer.getAttr("y"));
+              var maiorY, menory;
+              maiorY = gridLinesH[0].y;
+              menorY = gridLinesH[0].y;
+
+              for(var i=1; i<gridLinesH.length;i++){
+                if(gridLinesH[i].y>maiorY){
+                  maiorY = gridLinesH[i].y;
+                }
+                if(gridLinesH[i].y<menory){
+                  menorY = gridLinesH[i].y;
+                }
+              }
+              if((menorY-overflowSize)==absPos.y){
+                $("#t").html("equi");                
+              }else{
+                $("#t").html(absPos.y+"/"+(menorY)+"//"+gridLayer.getAttr("y"));
+              }
+
+              
               //gridLinesH[i].setAttr("y", absPos.y%viewportHeight);
 
 

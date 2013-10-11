@@ -16,46 +16,46 @@
 
       var stageWidth = $(window).width();
       var stageHeight = $(window).height();
-      var startScale = 1;
+      
+      var diffW = 20-(stageWidth%20);
+      var diffH = 20-(stageHeight%20);
+
+      var scale = 1;
+
       var gridLayer;
       var functionLayer;
-      var cumulatedXOffset = 0;
-      var cumulatedYOffset = 0;
+      
       var verticalLines = [];
       var horizontalLines = [];
+
       var isDragging = false;
       var lastCursorX = 0;
       var lastCursorY = 0;
 
-      var stage = new Kinetic.Stage({
-        container: 'container',
-        width: stageWidth,
-        height: stageHeight,
-        draggable: false,
-        x: stageWidth/2,
-        y: stageHeight/2,
-      });
+      var stage; 
 
       function redrawGrid(){
-        var scale = 1;
-        var halfWidth = Math.floor(stageWidth/2) - Math.floor(stageWidth/2)%(scale*20);
-        var halfHeight = Math.floor(stageHeight/2) - Math.floor(stageHeight/2)%(scale*20);
+        var halfWidth = Math.floor(stageWidth/2);
+        //Math.floor(stageWidth/2) - Math.floor(stageWidth/2)%(scale*20);
+        var halfHeight = Math.floor(stageHeight/2);
+        //Math.floor(stageHeight/2) - Math.floor(stageHeight/2)%(scale*20);
         var xOffset = stage.getPointerPosition().x - lastCursorX;
         var yOffset = stage.getPointerPosition().y - lastCursorY;
         //draw vertical lines
-        for(var i = 0; i < verticalLines.length; i++){
-          var lastLineX = verticalLines[i].getPoints()[0].x;
-          if(xOffset != 0){ 
+        if(xOffset != 0){
+          for(var i = 0; i < verticalLines.length; i++){
+            var lastLineX = verticalLines[i].getPoints()[0].x;
+            //console.log(lastLineX%20);
             if( xOffset > 0) {//fui pra direita
-              if(halfWidth - lastLineX < 5){
-                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset-stageWidth+(stageWidth%(20*scale)));
-                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset-stageWidth+(stageWidth%(20*scale)));
+              if(halfWidth - lastLineX < 2){
+                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset-stageWidth);
+                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset-stageWidth);
               } else {
                 verticalLines[i].getPoints()[0].x = (lastLineX+xOffset);
                 verticalLines[i].getPoints()[1].x = (lastLineX+xOffset);
               }
             }else{ //fui pra esquerda
-              if( halfWidth + lastLineX < 5){
+              if( halfWidth + lastLineX < 2){
                 verticalLines[i].getPoints()[0].x = (lastLineX+xOffset+stageWidth);
                 verticalLines[i].getPoints()[1].x = (lastLineX+xOffset+stageWidth);
               } else {
@@ -66,11 +66,12 @@
           }
         }
         //draw horizontal lines
-        for(var j = 0; j < horizontalLines.length; j++){
-          var lastLineY = horizontalLines[j].getPoints()[0].y;
-          if(yOffset != 0){ 
+        if(yOffset != 0){
+          for(var j = 0; j < horizontalLines.length; j++){
+            var lastLineY = horizontalLines[j].getPoints()[0].y;
+          
             if( yOffset > 0) {//fui pra cima
-              if(halfHeight - lastLineY < 5){
+              if(halfHeight - lastLineY < 2){
                 horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset-stageHeight);
                 horizontalLines[j].getPoints()[1].y = (lastLineX+yOffset-stageHeight);
               } else {
@@ -78,7 +79,7 @@
                 horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset);
               }
             }else{ //fui pra baixo
-              if( halfHeight + lastLineY < 5){
+              if( halfHeight + lastLineY < 2){
                 horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset+stageHeight);
                 horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset+stageHeight);
               } else {
@@ -88,73 +89,85 @@
             }
           }
         }
+        stage.draw();
 
       }
 
-      stage.getContent().addEventListener('mousedown', function(evt){
-         isDragging = true;
-         lastCursorY = stage.getPointerPosition().y;
-         lastCursorX = stage.getPointerPosition().x;
-      });
+      function init(){
+        stage = new Kinetic.Stage({
+          container: 'container',
+          width: stageWidth,
+          height: stageHeight,
+          draggable: false,
+          x: Math.floor(stageWidth/2),
+          y: Math.floor(stageHeight/2),
+        });
 
-      stage.getContent().addEventListener('touchstart', function(evt){
-         isDragging = true;
-         lastCursorY = stage.getPointerPosition().y;
-         lastCursorX = stage.getPointerPosition().x;
-      });
+        stage.getContent().addEventListener('mousedown', function(evt){
+           isDragging = true;
+           lastCursorY = stage.getPointerPosition().y;
+           lastCursorX = stage.getPointerPosition().x;
+        });
 
-      stage.getContent().addEventListener('mousemove', function(evt){
-        x1 = stage.getPointerPosition().x;
-        y1 = stage.getPointerPosition().y;
-        if(isDragging){
-          redrawGrid();
-          gridLayer.batchDraw();
-          lastCursorY = stage.getPointerPosition().y;
-          lastCursorX = stage.getPointerPosition().x;
-        }
-      });
+        stage.getContent().addEventListener('touchstart', function(evt){
+           isDragging = true;
+           lastCursorY = stage.getPointerPosition().y;
+           lastCursorX = stage.getPointerPosition().x;
+        });
 
-      stage.getContent().addEventListener('touchmove', function(evt){
-        x1 = stage.getPointerPosition().x;
-        y1 = stage.getPointerPosition().y;
-        if(isDragging)
-          redrawGrid();
-      });
+        stage.getContent().addEventListener('mousemove', function(evt){
+          x1 = stage.getPointerPosition().x;
+          y1 = stage.getPointerPosition().y;
+          if(isDragging){
+            redrawGrid();
+            ///gridLayer.batchDraw();
+            lastCursorY = stage.getPointerPosition().y;
+            lastCursorX = stage.getPointerPosition().x;
+          }
+        });
 
-      stage.getContent().addEventListener('mouseup', function(evt){
-        isDragging = false;
-        lastCursorY = 0;
-        lastCursorX = 0;
-      });
+        stage.getContent().addEventListener('touchmove', function(evt){
+          x1 = stage.getPointerPosition().x;
+          y1 = stage.getPointerPosition().y;
+          if(isDragging){
+            redrawGrid();
+            //gridLayer.batchDraw();
+            lastCursorY = stage.getPointerPosition().y;
+            lastCursorX = stage.getPointerPosition().x;
+          }
+        });
 
-      stage.getContent().addEventListener('touchend', function(evt){
-        isDragging = false;
-        lastCursorY = 0;
-        lastCursorX = 0;
-      });
+        stage.getContent().addEventListener('mouseup', function(evt){
+          isDragging = false;
+          lastCursorY = 0;
+          lastCursorX = 0;
+        });
 
+        stage.getContent().addEventListener('touchend', function(evt){
+          isDragging = false;
+          lastCursorY = 0;
+          lastCursorX = 0;
+        });
 
+      }
 
       $(function(){
+        init();
+
         gridLayer = new Kinetic.Layer();
         functionLayer = new Kinetic.Layer();
         //Desenha toscamente o grid...
-        function firstDrawGrid(scale, width, height, xOffset, yOffset){
-          var halfWidth = Math.floor(width/2) - Math.floor(width/2)%(scale*20);
-          var halfHeight = Math.floor(height/2) - Math.floor(height/2)%(scale*20);
-          cumulatedXOffset += xOffset;
-          cumulatedYOffset += yOffset;
+        function firstDrawGrid(scale, width, height){
+
+          //var halfWidth = Math.floor(width/2) - Math.floor(width/2)%(scale*20);
+          var halfWidth = Math.floor(width/2); //- Math.floor(width/2)%(scale*20);
+
+          var halfHeight = Math.floor(height/2); //- Math.floor(height/2)%(scale*20);
+
+
+
           for(var i = -halfWidth; i <= halfWidth; i += 20*scale){
-            var color;
-            if(i%halfWidth == 0 && (i != 0 || i!= halfWidth)){
-              color = 'red';
-            } else {
-              if(i%100 == 0){
-                color = '#333333';
-              } else {
-                color = '#999999';
-              }
-            }
+            var color = '#999999';
             var line = new Kinetic.Line({
               points: [i, -halfHeight, i, halfHeight],
               stroke: color,
@@ -163,18 +176,20 @@
             verticalLines.push(line);
             gridLayer.add(line);
           }
-          for(var i = -halfHeight; i <= halfHeight; i += 20*scale){
-            var color;
-             if(i%halfHeight == 0 && (i != 0 || i!= halfHeight)){
-              color = 'red';
-            } else {
-                if(i%100 == 0){
-                  color = '#333333';
-                } else {
-                  color = '#999999';
-                }
+          if(halfWidth%5!=0){
+            var count = 1;
+            while(halfWidth%5!=0){
+              var line = new Kinetic.Line({
+                  points: [halfWidth + ((halfWidth - 20)%20)*count, -halfHeight, halfWidth + ((halfWidth - 20)%20)*count, halfHeight],
+                  stroke: color,
+                  strokeWidth: 0.4
+              });
+              verticalLines.push(line);
             }
-
+          }
+          for(var i = -halfHeight; i <= halfHeight; i += 20*scale){
+            var color = '#999999';
+              
             var line = new Kinetic.Line({
               points: [-halfWidth, i, halfWidth, i],
               stroke: color,
@@ -183,9 +198,15 @@
             horizontalLines.push(line);
             gridLayer.add(line);
           }
+          var line = new Kinetic.Line({
+            points: [-halfWidth, halfHeight + (halfHeight-20)%20, halfWidth, halfHeight + (halfHeight-20)%20],
+            stroke: color,
+            strokeWidth: 0.4
+          });
+          horizontalLines.push(line);
         }
 
-        firstDrawGrid(1, stageWidth, stageHeight,0,0);
+        firstDrawGrid(1, stageWidth, stageHeight);
         stage.add(gridLayer);
         stage.draw();
         stage.add(functionLayer);
