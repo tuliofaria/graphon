@@ -48,8 +48,8 @@
           if(xOffset != 0){ 
             if( xOffset > 0) {//fui pra direita
               if(halfWidth - lastLineX < 5){
-                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset-stageWidth);
-                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset-stageWidth);
+                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset-stageWidth+(stageWidth%(20*scale)));
+                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset-stageWidth+(stageWidth%(20*scale)));
               } else {
                 verticalLines[i].getPoints()[0].x = (lastLineX+xOffset);
                 verticalLines[i].getPoints()[1].x = (lastLineX+xOffset);

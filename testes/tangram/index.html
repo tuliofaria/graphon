@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Tangram Game HTML5 KineticJS</title>
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+			canvas {
+				border: 1px solid #9C9898;
+			}
+		</style>
+		<script type='text/javascript' src="kinetic-v4.7.2.min.js"></script>
+		<script>
+			var rot;
+			var angle;
+			window.onload = function() {
+				var stage = new Kinetic.Stage({
+					container : "container",
+					width : 728,
+					height : 700
+				});
+
+				var layer = new Kinetic.Layer();
+				var objeto;
+				var reverse=1;
+				var cuadrado = new Kinetic.Rect({//cuadrado
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					width : 100,
+					height : 100,
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [50, 50] //centrar la rotacion
+				});
+				cuadrado.on("mouseover", function() {
+					objeto = "cuadrado";
+					cuadrado.moveToTop();
+					document.body.style.cursor = "pointer";
+				});
+				cuadrado.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+
+				var tri1p = new Kinetic.Polygon({//triangulo pequeño 1
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					points : [50, 50, 50, 150, 150, 150],
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [75, 100] //centrar la rotacion
+				});
+
+				tri1p.on("mouseover", function() {
+					objeto = "tri1p";
+					tri1p.moveToTop();
+					document.body.style.cursor = "pointer";
+				});
+				tri1p.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+
+				var tri2p = new Kinetic.Polygon({//triangulo pequeño 2
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					points : [200, 200, 200, 300, 300, 300],
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [225, 250] //centrar la rotacion
+				});
+
+				tri2p.on("mouseover", function() {
+					objeto = "tri2p";
+					tri2p.moveToTop();
+					document.body.style.cursor = "pointer";
+				});
+				tri2p.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+
+				var trim = new Kinetic.Polygon({//triangulo mediano
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					points : [20, 300, 20, 440, 160, 440],
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [65, 380] //centrar la rotacion
+				});
+
+				trim.on("mouseover", function() {
+					objeto = "trim";
+					trim.moveToTop();
+					document.body.style.cursor = "pointer";
+				});
+				trim.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+
+				var tri1g = new Kinetic.Polygon({//triangulo grande1
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					points : [300, 20, 300, 220, 500, 220],
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [380, 170] //centrar la rotacion
+				});
+
+				tri1g.on("mouseover", function() {
+					objeto = "tri1g";
+					tri1g.moveToTop();
+					document.body.style.cursor = "pointer";
+				});
+				tri1g.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+
+				var tri2g = new Kinetic.Polygon({//triangulo grande2
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					points : [400, 20, 600, 20, 600, 220],
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [520, 100] //centrar la rotacion
+				});
+
+				tri2g.on("mouseover", function() {
+					tri2g.moveToTop();
+					objeto = "tri2g";
+					document.body.style.cursor = "pointer";
+				});
+				tri2g.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+
+				var trap = new Kinetic.Polygon({//triangulo grande2
+					x : (Math.random()+0.1) * (stage.getWidth()-125),
+					y : (Math.random()+0.1) * (stage.getHeight()-125),
+					points : [400, 20, 541, 20, 611, 90, 470, 90],
+					fill : "#000000",
+					draggable : true,
+					stroke : "white",
+					strokeWidth : 1,
+					centerOffset : [520, 50] //centrar la rotacion
+				});
+
+				trap.on("mouseover", function() {
+					objeto = "trap";
+					trap.moveToTop();
+					document.body.style.cursor = "pointer";
+				});
+				trap.on("mouseout", function() {
+					document.body.style.cursor = "default";
+				});
+				trap.on("click", function() { //rotacion del trapecio
+					if(reverse==1){
+						for(i=0;i<1500;i++){
+							var scale = Math.sin(i * 2 * Math.PI / 2000) + 0.001;
+          					trap.setScale(scale,1);
+						}
+						reverse=2;
+					}
+					else{
+						for(i=0;i<1500;i++){
+							var scale = Math.sin(-i * 2 * Math.PI / 2000) + 0.001;
+          					trap.setScale(scale,1);
+						}
+						reverse=1;
+					}
+					layer.draw();
+					trap.moveToTop();
+				});
+								
+				addEventListener('keydown', function(e) {//control de la rotacion en el teclado
+					if(e.keyCode == 90) {
+						angle = -0.009;//velocidad de rotacion
+						stage.start();
+					};
+					if(e.keyCode == 88) {
+						angle = 0.009;
+						stage.start();
+					}
+				}, false);
+				addEventListener('keyup', function() {
+					stage.stop();
+				}, false);
+
+				/*stage.onFrame(function() {//rotaciones de los objetos
+					if(objeto == "trap")
+						trap.rotate(angle);
+					if(objeto == "tri1p")
+						tri1p.rotate(angle);
+					if(objeto == "tri2p")
+						tri2p.rotate(angle);
+					if(objeto == "trim")
+						trim.rotate(angle);
+					if(objeto == "tri1g")
+						tri1g.rotate(angle);
+					if(objeto == "tri2g")
+						tri2g.rotate(angle);
+					if(objeto == "cuadrado")
+						cuadrado.rotate(angle);
+					layer.draw();
+				});*/
+
+				layer.add(trap);
+				layer.add(tri2g);
+				layer.add(tri1g);
+				layer.add(trim);
+				layer.add(tri2p);
+				layer.add(tri1p);
+				layer.add(cuadrado);
+				stage.add(layer);
+			};
+		</script>
+	</head>
+	<body onmousedown="return false;">
+		<div id="general">
+			TanGram Game developed with HTML5 Canvas JavaScript library. KineticJS.
+			<div id="container"> </div>
+			All pieces are moved with the mouse.<br>
+			Every Piece is rotated individually when the mouse is over the selected piece.<br>
+			Left Rotation: z <br>
+			Right Rotation: x<br>
+			Ups! 1 click on the rhomboid to flip it ;)<br>
+			If you like this, you can give me feedback. Enjoy!<br>
+			</div>	
+	</body>
+</html>
