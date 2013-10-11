@@ -104,12 +104,12 @@
       $(function(){
         scale = 1;
         isDragging = false;
-        cartesianWidth = $("#cartesianLimit").width();
+        cartesianWidth = $("#cartesianPlane").width();
         cartesianHeight = $(window).height(); //removing padding
         normalWidth = cartesianWidth - (cartesianWidth%20);
-        normalWidth = normalWidth +20*normalWidth%5;
+        //normalWidth = normalWidth +20*normalWidth%5;
         normalHeight = cartesianHeight + 20*normalWidth%5;
-        normalHeight = cartesianHeight - (cartesianHeight%20);
+        //normalHeight = cartesianHeight - (cartesianHeight%20);
         console.log("normal h:"+normalHeight + " normal w:" +normalWidth);
         console.log("h: "+cartesianHeight+" w:"+cartesianWidth);
         stage = new Kinetic.Stage({
@@ -157,19 +157,15 @@
 
     </script>
     <div class="container">
-      <div class="row">
-        <div class="span2">
-          <div class="btn-group">
-            <button class="btn btn-primary" onClick="">+</button>
-            <button class="btn btn-primary" onClick="">-</button>
-          </div>
-        </div>
-        <div class="span10" id="cartesianLimit">
-          <div id="cartesianPlane" style="background-color: 'red';"></div>      
-        </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onClick="">+</button>
+        <button class="btn btn-primary" onClick="">-</button>
       </div>
-      
+      <div id="cartesianPlane" style="background-color: 'red';"></div>      
     </div>
+      
+      
+    
 
     
   </body>
