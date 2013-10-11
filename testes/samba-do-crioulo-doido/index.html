@@ -3,6 +3,7 @@
   <head>
     <style>
       body {
+        padding:100px;
       }
     </style>
     <link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -47,7 +48,7 @@
           var lastLineX = verticalLines[i].getPoints()[0].x;
           if(xOffset != 0){ 
             if( xOffset > 0) {//fui pra direita
-              if(halfWidth - lastLineX < 2){
+              if(halfWidth - lastLineX < 1){
                 verticalLines[i].getPoints()[0].x = (lastLineX+xOffset-stageWidth);
                 verticalLines[i].getPoints()[1].x = (lastLineX+xOffset-stageWidth);
               } else {
@@ -55,7 +56,7 @@
                 verticalLines[i].getPoints()[1].x = (lastLineX+xOffset);
               }
             }else{ //fui pra esquerda
-              if( halfWidth + lastLineX < 2){
+              if( halfWidth + lastLineX < 1){
                 verticalLines[i].getPoints()[0].x = (lastLineX+xOffset+stageWidth);
                 verticalLines[i].getPoints()[1].x = (lastLineX+xOffset+stageWidth);
               } else {
@@ -70,7 +71,7 @@
           var lastLineY = horizontalLines[j].getPoints()[0].y;
           if(yOffset != 0){ 
             if( yOffset > 0) {//fui pra cima
-              if(halfHeight - lastLineY < 2){
+              if(halfHeight - lastLineY < 20){
                 horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset-stageHeight);
                 horizontalLines[j].getPoints()[1].y = (lastLineX+yOffset-stageHeight);
               } else {
@@ -78,7 +79,7 @@
                 horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset);
               }
             }else{ //fui pra baixo
-              if( halfHeight + lastLineY < 2){
+              if( halfHeight + lastLineY < 20){
                 horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset+stageHeight);
                 horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset+stageHeight);
               } else {
@@ -88,7 +89,6 @@
             }
           }
         }
-
       }
 
       stage.getContent().addEventListener('mousedown', function(evt){
@@ -104,8 +104,6 @@
       });
 
       stage.getContent().addEventListener('mousemove', function(evt){
-        x1 = stage.getPointerPosition().x;
-        y1 = stage.getPointerPosition().y;
         if(isDragging){
           redrawGrid();
           gridLayer.batchDraw();
@@ -115,10 +113,12 @@
       });
 
       stage.getContent().addEventListener('touchmove', function(evt){
-        x1 = stage.getPointerPosition().x;
-        y1 = stage.getPointerPosition().y;
-        if(isDragging)
+         if(isDragging){
           redrawGrid();
+          gridLayer.batchDraw();
+          lastCursorY = stage.getPointerPosition().y;
+          lastCursorX = stage.getPointerPosition().x;
+        }
       });
 
       stage.getContent().addEventListener('mouseup', function(evt){
