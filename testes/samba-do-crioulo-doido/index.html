@@ -66,9 +66,8 @@
           }
         }
         //draw horizontal lines
-        /*
         for(var j = 0; j < horizontalLines.length; j++){
-          var lastLineY = verticalLines[j].getPoints()[0].y;
+          var lastLineY = horizontalLines[j].getPoints()[0].y;
           if(yOffset != 0){ 
             if( yOffset > 0) {//fui pra cima
               if(halfHeight - lastLineY < 5){
@@ -89,7 +88,7 @@
             }
           }
         }
-        */
+
       }
 
       stage.getContent().addEventListener('mousedown', function(evt){
