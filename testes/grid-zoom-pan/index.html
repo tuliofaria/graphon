@@ -73,6 +73,10 @@
         var viewportWidth = 400;
         var overflowSize = 50; // 50px a mais em cada direcao do viewport
 
+        var h1 = null;
+        var h2 = null;
+        var h3 = null;
+
         function toCartX(x){
           return ((cartesianSize/2)+x);
         }
@@ -93,20 +97,33 @@
           stage.on('dragmove', function(ev){
             var absPos = stage.getAbsolutePosition();
             
-            if(absPos.y>0){
+            // descobrir onde estão a primeira e ultima linhas
+            gridLayer.draw();
+
+            // onde está, onde deveria estar
+            // onde está
+            //absPos.y;
+
+            
+
+            if(true){
               // comeca a redesenhar
-              //$("#t").html(absPos.x+":"+absPos.y);
+              gridLinesH[gridLinesH.length-1].img.setPosition(0, 0-gridLinesH[gridLinesH.length-1].y-50);
+              $("#t").html(absPos.y+":"+absPos.y+"//"+gridLayer.getAttr("y"));
               //gridLinesH[i].setAttr("y", absPos.y%viewportHeight);
-              $("#t").html("VP"+viewportHeight+"/"+absPos.y+"/Stage"+stage.getAttr("height"));
-              for(var i = 0; i<gridLinesH.length; i++){
+
+
+
+              //$("#t").html(gridLinesH.length+"VP"+viewportHeight+"/"+absPos.y+"/Stage"+stage.getAttr("height"));
+              /*for(var i = 0; i<gridLinesH.length; i++){
                 if(gridLinesH[i].getAttr("y")>(viewportHeight-absPos.y)){
-                  gridLinesH[i].setAttr("y", 0);
+                  //gridLinesH[i].setAttr("y", 0);
                 }
-                gridLinesH[i].setAttr("x", 0-absPos.x); // ok
-              }
+                //gridLinesH[i].setAttr("x", 0-absPos.x); // ok
+              }*/
             }else{
               for(var i = 0; i<gridLinesH.length; i++){
-                gridLinesH[i].setAttr("x", 0-absPos.x); // ok
+                //gridLinesH[i].setAttr("x", 0-absPos.x); // ok
               }
             }
             //$("#t").html(ev.target.getAttr("x")+":"+ev.target.getAttr("y"));
@@ -121,7 +138,7 @@
           });
 
           // desenhando o grid
-          gridLayer = new Kinetic.Layer();
+          gridLayer = new Kinetic.Layer({draggable: true});
           graficoLayer = new Kinetic.Layer();
 
           // add the layer to the stage
@@ -132,10 +149,8 @@
           drawGrid();
           
           // centralizando o grafico
-          stage.attrs.x = ($("#grafico").width()-viewportWidth)/2;
-          stage.attrs.y = ($("#grafico").height()-viewportHeight)/2;
-
-          
+          stage.setAttr("x", 0-overflowSize);
+          stage.setAttr("y", 0-overflowSize);
 
           var latexMath = $("#bla");
           latexMath.bind('keydown keypress', function() {
@@ -174,7 +189,11 @@
               strokeWidth: 0.5
             });
             gridLayer.add(line);
-            gridLinesH.push(line);
+            gridLinesH.push(
+              {
+                img: line,
+                y: i
+              });
 
             if((i!=cartesianSize/2)&&(i%100==0)){
               var label = new Kinetic.Text({
@@ -202,7 +221,7 @@
               stroke: color,
               strokeWidth: 0.5
             });
-            //gridLayer.add(line);
+            gridLayer.add(line);
 
             if(i%100==0){
               var label = new Kinetic.Text({
