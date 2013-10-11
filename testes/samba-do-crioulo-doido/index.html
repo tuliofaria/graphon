@@ -42,24 +42,53 @@
         var halfHeight = Math.floor(stageHeight/2) - Math.floor(stageHeight/2)%(scale*20);
         var xOffset = stage.getPointerPosition().x - lastCursorX;
         var yOffset = stage.getPointerPosition().y - lastCursorY;
+        //draw vertical lines
         for(var i = 0; i < verticalLines.length; i++){
-          var lastLineX = verticalLines[i].getPosition().x;
+          var lastLineX = verticalLines[i].getPoints()[0].x;
           if(xOffset != 0){ 
             if( xOffset > 0) {//fui pra direita
-              if( halfWidth - lastLineX > 5){
-                verticalLines[i].setPosition((lastLineX+xOffset),verticalLines[i].getPosition().y);
+              if(halfWidth - lastLineX < 5){
+                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset-stageWidth);
+                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset-stageWidth);
               } else {
-                verticalLines[i].setPosition((lastLineX+xOffset-stageWidth),verticalLines[i].getPosition().y);
+                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset);
+                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset);
               }
             }else{ //fui pra esquerda
               if( halfWidth + lastLineX < 5){
-                verticalLines[i].setPosition((lastLineX+xOffset+stageWidth),verticalLines[i].getPosition().y);
+                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset+stageWidth);
+                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset+stageWidth);
               } else {
-                verticalLines[i].setPosition((lastLineX+xOffset),verticalLines[i].getPosition().y);
+                verticalLines[i].getPoints()[0].x = (lastLineX+xOffset);
+                verticalLines[i].getPoints()[1].x = (lastLineX+xOffset);
               }
             }
           }
         }
+        //draw horizontal lines
+        for(var j = 0; j < horizontalLines.length; j++){
+          var lastLineY = horizontalLines[j].getPoints()[0].y;
+          if(yOffset != 0){ 
+            if( yOffset > 0) {//fui pra cima
+              if(halfHeight - lastLineY < 5){
+                horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset-stageHeight);
+                horizontalLines[j].getPoints()[1].y = (lastLineX+yOffset-stageHeight);
+              } else {
+                horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset);
+                horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset);
+              }
+            }else{ //fui pra baixo
+              if( halfHeight + lastLineY < 5){
+                horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset+stageHeight);
+                horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset+stageHeight);
+              } else {
+                horizontalLines[j].getPoints()[0].y = (lastLineY+yOffset);
+                horizontalLines[j].getPoints()[1].y = (lastLineY+yOffset);
+              }
+            }
+          }
+        }
+
       }
 
       stage.getContent().addEventListener('mousedown', function(evt){
