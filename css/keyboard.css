@@ -1,19 +1,19 @@
 @font-face {
 font-family: 'stixgeneralitalic';
-src: url('../mathquill/font/stixgeneral-bundle/stixgeneralitalic-webfont.eot'); /* IE9 Compat Modes */
-src: url('../mathquill/font/stixgeneral-bundle/stixgeneralitalic-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-url('../mathquill/font/stixgeneral-bundle/stixgeneralitalic-webfont.woff') format('woff'), /* Modern Browsers */
-url('../mathquill/font/stixgeneral-bundle/stixgeneralitalic-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
-url('../mathquill/font/stixgeneral-bundle/stixgeneralitalic-webfont.svg#svgstixgeneralitalic-webfont') format('svg'); /* Legacy iOS */
+src: url('../font/stixgeneral-bundle/stixgeneralitalic-webfont.eot'); /* IE9 Compat Modes */
+src: url('../font/stixgeneral-bundle/stixgeneralitalic-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+url('../font/stixgeneral-bundle/stixgeneralitalic-webfont.woff') format('woff'), /* Modern Browsers */
+url('../font/stixgeneral-bundle/stixgeneralitalic-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+url('../font/stixgeneral-bundle/stixgeneralitalic-webfont.svg#svgstixgeneralitalic-webfont') format('svg'); /* Legacy iOS */
 }
 
 @font-face {
 font-family: 'stixgeneral';
-src: url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.eot'); /* IE9 Compat Modes */
-src: url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.woff') format('woff'), /* Modern Browsers */
-url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
-url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.svg#svgstixgeneral-webfont') format('svg'); /* Legacy iOS */
+src: url('../font/stixgeneral-bundle/stixgeneral-webfont.eot'); /* IE9 Compat Modes */
+src: url('../font/stixgeneral-bundle/stixgeneral-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+url('../font/stixgeneral-bundle/stixgeneral-webfont.woff') format('woff'), /* Modern Browsers */
+url('../font/stixgeneral-bundle/stixgeneral-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+url('../font/stixgeneral-bundle/stixgeneral-webfont.svg#svgstixgeneral-webfont') format('svg'); /* Legacy iOS */
 }
 
 .keyboardcontainer{

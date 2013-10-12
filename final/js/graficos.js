@@ -1,17 +1,4 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <style>
-
-    </style>
-    <link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
-    <script src="./kinetic-v4.7.2.min.js"></script>
-    <script src="../../jquery/jquery-1.10.2.min.js"></script>
-    <script src="../../bootstrap/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-    <script defer="defer">
-      var stage;
+var stage;
       var scale;
       var cartesianWidth;
       var cartesianHeight;
@@ -147,6 +134,7 @@
       $(function(){
         scale = 1;
         isDragging = false;
+        $("#cartesianPlane").height($(window).height());
         cartesianWidth = $("#cartesianPlane").width();
         cartesianHeight = $(window).height(); //removing padding
         normalWidth = cartesianWidth - (cartesianWidth%100) + 100;
@@ -202,14 +190,18 @@
         });
 
         stage.draw();
-      });
-    </script>
-    <div id="cartesianPlane"></div> 
-    </div>
-      
-      
-    
 
-    
-  </body>
-</html>
+        $(window).resize(function(){
+          $("#cartesianPlane").height($(window).height());
+        });
+
+        $("#iconeCaret").hide();
+        $(".keyboardCont").hide();
+        $("#keyboardToggle").click(function(){
+          $(".keyboardCont").slideToggle();
+          $("#iconeCaret").toggle();
+          $("#iconeCaret2").toggle();
+          return false;
+        });
+
+      });
