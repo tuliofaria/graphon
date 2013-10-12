@@ -2,9 +2,7 @@
 <html>
   <head>
     <style>
-    body{
-      padding-top: 50px;
-    }
+
     </style>
     <link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
     <script src="./kinetic-v4.7.2.min.js"></script>
@@ -37,23 +35,37 @@
 
       //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
-        for(var i = -width/2; i < width/2; i+=offset){
-          var line = new Kinetic.Line({
+        for(var i = 0; i < width/2; i+=offset){
+          var line1 = new Kinetic.Line({
                 points: [i, -height/2, i, height/2],
                 stroke: color,
                 strokeWidth: 0.1
               });
-          verticalArray.push(line);
-          currentLayer.add(line);
+          var line2 = new Kinetic.Line({
+                points: [-i, -height/2, -i, height/2],
+                stroke: color,
+                strokeWidth: 0.1
+              });
+          verticalArray.push(line1);
+          currentLayer.add(line1);
+          verticalArray.push(line2);
+          currentLayer.add(line2);
         }
-        for(var i = -height/2; i < height/2; i+=offset){
-          var line = new Kinetic.Line({
+        for(var i = 0; i < height/2; i+=offset){
+          var line1 = new Kinetic.Line({
                 points: [-width/2, i, width/2, i],
                 stroke: color,
                 strokeWidth: 0.1
               });
-          horizontalArray.push(line);
-          currentLayer.add(line);
+          var line2 = new Kinetic.Line({
+                points: [-width/2, -i, width/2, -i],
+                stroke: color,
+                strokeWidth: 0.1
+          });
+          horizontalArray.push(line1);
+          currentLayer.add(line1);
+          horizontalArray.push(line2);
+          currentLayer.add(line2);
         }
       }
 
@@ -191,8 +203,6 @@
 
         stage.draw();
       });
-
-    
     </script>
     <div id="cartesianPlane"></div> 
     </div>
