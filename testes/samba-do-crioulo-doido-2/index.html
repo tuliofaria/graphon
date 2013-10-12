@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+    body{
+      padding-top: 50px;
+    }
+    #cartesianLimit{
+      overflow: hidden;
+    }
+    </style>
+    <link href="../../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script src="./kinetic-v4.7.2.min.js"></script>
+    <script src="../../jquery/jquery-1.10.2.min.js"></script>
+    <script src="../../bootstrap/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <script defer="defer">
+      var stage;
+      var scale;
+      var cartesianWidth;
+      var cartesianHeight;
+      var normalWidth;
+      var normalHeight;
+
+      var smallerGridLayer;
+      var smallerVerticalLines;
+      var smallerHorizontalLines;
+
+      var biggerGridLayer;
+      var biggerVerticalLines;
+      var biggerHorizontalLines;
+
+      var lastCursorX;
+      var lastCursorY;
+      var isDragging;
+
+      //hipothesis: height and width are divisible by offset
+      function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
+        for(var i = -width/2; i < width/2; i+=offset){
+          var line = new Kinetic.Line({
+                points: [i, -height/2, i, height/2],
+                stroke: color,
+                strokeWidth: 0.2
+              });
+          verticalArray.push(line);
+          currentLayer.add(line);
+        }
+        for(var i = -height/2; i < height/2; i+=offset){
+          var line = new Kinetic.Line({
+                points: [-width/2, i, width/2, i],
+                stroke: color,
+                strokeWidth: 0.2
+              });
+          horizontalArray.push(line);
+          currentLayer.add(line);
+        }
+      }
+      
+      function reDrawGrid(width, height, xOffset, yOffset, horizontalLines, verticalLines, layer){
+        for(var i = 0; i < verticalLines.length; i++){
+          currentLineX = verticalLines[i].getPoints()[0].x;
+          if(xOffset != 0){
+            if(xOffset > 0){//direita
+              if(currentLineX + xOffset > width/2){//ta no final, preciso mudar pro começo...
+                verticalLines[i].getPoints()[0].x = (currentLineX - width + xOffset);
+                verticalLines[i].getPoints()[1].x = (currentLineX - width + xOffset);
+              } else {
+                verticalLines[i].getPoints()[0].x = (currentLineX + xOffset);
+                verticalLines[i].getPoints()[1].x = (currentLineX + xOffset);
+              }
+            }else{//esquerda
+              if(currentLineX + xOffset < -width/2){//ta no final à esquerda
+                verticalLines[i].getPoints()[0].x = (currentLineX + width + xOffset);
+                verticalLines[i].getPoints()[1].x = (currentLineX + width + xOffset);
+              }else{
+                verticalLines[i].getPoints()[0].x = (currentLineX + xOffset);
+                verticalLines[i].getPoints()[1].x = (currentLineX + xOffset);
+              }
+            }
+          }
+        }
+        for(i = 0; i < horizontalLines.length; i++){
+          currentLineY = horizontalLines[i].getPoints()[0].y;
+          if(yOffset!=0){
+            if(yOffset > 0){//subindo
+              if(currentLineY + yOffset > height/2){//ta no topo
+                horizontalLines[i].getPoints()[0].y = (currentLineY - height + yOffset);
+                horizontalLines[i].getPoints()[1].y = (currentLineY - height + yOffset);
+              }else{
+                horizontalLines[i].getPoints()[0].y = (currentLineY + yOffset);
+                horizontalLines[i].getPoints()[1].y = (currentLineY + yOffset);
+              }
+            }else{//descendo
+              if(currentLineY + yOffset < -height/2){//ta lá embaixo
+                horizontalLines[i].getPoints()[0].y = (currentLineY + height + yOffset);
+                horizontalLines[i].getPoints()[1].y = (currentLineY + height + yOffset);
+              }else{
+                horizontalLines[i].getPoints()[0].y = (currentLineY + yOffset);
+                horizontalLines[i].getPoints()[1].y = (currentLineY + yOffset);
+              }
+            }
+          }
+        }
+      }
+      
+      $(function(){
+        scale = 1;
+        isDragging = false;
+        cartesianWidth = $("#cartesianLimit").width();
+        cartesianHeight = $(window).height(); //removing padding
+        normalWidth = cartesianWidth - (cartesianWidth%20);
+        normalWidth = normalWidth +20*normalWidth%5;
+        normalHeight = cartesianHeight + 20*normalWidth%5;
+        normalHeight = cartesianHeight - (cartesianHeight%20);
+        console.log("normal h:"+normalHeight + " normal w:" +normalWidth);
+        console.log("h: "+cartesianHeight+" w:"+cartesianWidth);
+        stage = new Kinetic.Stage({
+          container: 'cartesianPlane',
+          width: normalWidth,
+          height: normalHeight,
+          draggable: false,
+          x: normalWidth/2,
+          y: normalHeight/2,
+        });
+        smallerVerticalLines = [];
+        biggerVerticalLines = [];
+        smallerHorizontalLines = [];
+        biggerHorizontalLines = [];
+        smallerGridLayer = new Kinetic.Layer();
+        initLines(smallerGridLayer,smallerVerticalLines, smallerHorizontalLines, 20, normalWidth, normalHeight, 'black');
+        biggerGridLayer = new Kinetic.Layer();
+        initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, 'red');
+        stage.add(smallerGridLayer);
+        stage.add(biggerGridLayer);
+        stage.on('contentMousedown contentTouchstart', function(evt){
+          isDragging = true;
+          lastCursorX = stage.getPointerPosition().x;
+          lastCursorY = stage.getPointerPosition().y;
+        });  
+        stage.on('contentMouseup contentTouchend', function(evt){
+          isDragging = false;
+        });
+        stage.on('contentMousemove contentTouchmove', function(evt){
+          if(isDragging){
+            var xOffset = stage.getPointerPosition().x - lastCursorX;
+            var yOffset = stage.getPointerPosition().y - lastCursorY;
+            //console.log("lastCursor x"+lastCursorX+" actual x "+stage.getPointerPosition().x+"offset x "+xOffset);
+            reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, smallerHorizontalLines, smallerVerticalLines, smallerGridLayer);
+            reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, biggerHorizontalLines, biggerVerticalLines, biggerGridLayer);
+            smallerGridLayer.batchDraw();
+            biggerGridLayer.batchDraw();
+          }
+          lastCursorX = stage.getPointerPosition().x;
+          lastCursorY = stage.getPointerPosition().y;
+        });
+        stage.draw();
+      });
+
+
+    </script>
+    <div class="container">
+      <div class="row">
+        <div class="span2">
+          <div class="btn-group">
+            <button class="btn btn-primary" onClick="">+</button>
+            <button class="btn btn-primary" onClick="">-</button>
+          </div>
+        </div>
+        <div class="span10" id="cartesianLimit">
+          <div id="cartesianPlane" style="background-color: 'red';"></div>      
+        </div>
+      </div>
+      
+    </div>
+
+    
+  </body>
+</html>

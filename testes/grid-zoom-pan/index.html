@@ -118,8 +118,11 @@
                 }
               }
               if((menorY-overflowSize)==absPos.y){
-                $("#t").html("equi");                
+                $("#t").html("equi");
+                // neste ponto nao precisa desenhar nenhuma linha
+                // nem compensar nada
               }else{
+                //if((menorY-overflowSize)
                 $("#t").html(absPos.y+"/"+(menorY)+"//"+gridLayer.getAttr("y"));
               }
 
@@ -176,6 +179,13 @@
               //drawFunction();
             });
           }).keydown().focus();
+
+
+          setInterval(function(){
+            stage.setAttr("y", -10);
+            console.log("opa");
+          }, 1000);
+
         });
   
       function calcCanvasSize(){
