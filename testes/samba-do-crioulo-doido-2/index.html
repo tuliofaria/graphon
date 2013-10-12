@@ -35,7 +35,7 @@
 
       //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
-        for(var i = 0; i < width/2; i+=offset){
+        for(var i = 0; i <= width/2; i+=offset){
           var line1 = new Kinetic.Line({
                 points: [i, -height/2, i, height/2],
                 stroke: color,
@@ -51,7 +51,7 @@
           verticalArray.push(line2);
           currentLayer.add(line2);
         }
-        for(var i = 0; i < height/2; i+=offset){
+        for(var i = 0; i <= height/2; i+=offset){
           var line1 = new Kinetic.Line({
                 points: [-width/2, i, width/2, i],
                 stroke: color,
