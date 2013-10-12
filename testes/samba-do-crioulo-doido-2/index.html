@@ -19,6 +19,9 @@
       var cartesianHeight;
       var normalWidth;
       var normalHeight;
+      
+      var axisLayer;
+      var axis;
 
       var smallerGridLayer;
       var smallerVerticalLines;
@@ -32,13 +35,13 @@
       var lastCursorY;
       var isDragging;
 
-      //hipothesis: height and width are divisible by offset
+      //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
         for(var i = -width/2; i < width/2; i+=offset){
           var line = new Kinetic.Line({
                 points: [i, -height/2, i, height/2],
                 stroke: color,
-                strokeWidth: 0.2
+                strokeWidth: 0.1
               });
           verticalArray.push(line);
           currentLayer.add(line);
@@ -47,10 +50,21 @@
           var line = new Kinetic.Line({
                 points: [-width/2, i, width/2, i],
                 stroke: color,
-                strokeWidth: 0.2
+                strokeWidth: 0.1
               });
           horizontalArray.push(line);
           currentLayer.add(line);
+        }
+      }
+
+      function reDrawAxis(xOffset, yOffset){
+        if(xOffset != 0){
+          axis[1].getPoints()[0].x = (axis[1].getPoints()[0].x + xOffset);
+          axis[1].getPoints()[1].x = (axis[1].getPoints()[1].x + xOffset);
+        }
+        if(yOffset!=0){
+          axis[0].getPoints()[0].y = (axis[0].getPoints()[0].y + yOffset);
+          axis[0].getPoints()[1].y = (axis[0].getPoints()[1].y + yOffset);
         }
       }
       
@@ -100,18 +114,31 @@
           }
         }
       }
-      
+
+      function drawAxis(){
+        var xAxis = new Kinetic.Line({
+          points: [-normalWidth/2, 0, normalWidth/2, 0],
+          stroke: 'black',
+          strokeWidth: 0.8
+        });
+        var yAxis = new Kinetic.Line({
+          points: [0, -normalHeight/2, 0, normalHeight/2],
+          stroke: 'black',
+          strokeWidth: 0.8
+        });
+        axis.push(xAxis);
+        axis.push(yAxis);
+        axisLayer.add(yAxis);
+        axisLayer.add(xAxis);
+      }
+
       $(function(){
         scale = 1;
         isDragging = false;
         cartesianWidth = $("#cartesianPlane").width();
         cartesianHeight = $(window).height(); //removing padding
         normalWidth = cartesianWidth - (cartesianWidth%100) + 100;
-        //normalWidth = normalWidth +20*normalWidth%5;
         normalHeight = cartesianHeight - (cartesianHeight%100) + 100;
-        //normalHeight = cartesianHeight - (cartesianHeight%20);
-        console.log("normal h:"+normalHeight + " normal w:" +normalWidth);
-        console.log("h: "+cartesianHeight+" w:"+cartesianWidth);
         stage = new Kinetic.Stage({
           container: 'cartesianPlane',
           width: normalWidth,
@@ -120,16 +147,24 @@
           x: normalWidth/2,
           y: normalHeight/2,
         });
+
+        //init arrays
         smallerVerticalLines = [];
         biggerVerticalLines = [];
         smallerHorizontalLines = [];
         biggerHorizontalLines = [];
+        axis = [];
+
+        //initLayers
         smallerGridLayer = new Kinetic.Layer();
         initLines(smallerGridLayer,smallerVerticalLines, smallerHorizontalLines, 20, normalWidth, normalHeight, 'black');
         biggerGridLayer = new Kinetic.Layer();
         initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, 'red');
+        axisLayer = new Kinetic.Layer();
+        drawAxis();
         stage.add(smallerGridLayer);
         stage.add(biggerGridLayer);
+        stage.add(axisLayer);
         stage.on('contentMousedown contentTouchstart', function(evt){
           isDragging = true;
           lastCursorX = stage.getPointerPosition().x;
@@ -142,15 +177,18 @@
           if(isDragging){
             var xOffset = stage.getPointerPosition().x - lastCursorX;
             var yOffset = stage.getPointerPosition().y - lastCursorY;
-            //console.log("lastCursor x"+lastCursorX+" actual x "+stage.getPointerPosition().x+"offset x "+xOffset);
             reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, smallerHorizontalLines, smallerVerticalLines, smallerGridLayer);
             reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, biggerHorizontalLines, biggerVerticalLines, biggerGridLayer);
+            reDrawAxis(xOffset, yOffset);
+            //com batchDraw depois pra não aparecer linha diagonal
             smallerGridLayer.batchDraw();
             biggerGridLayer.batchDraw();
+            axisLayer.batchDraw();
           }
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
         });
+
         stage.draw();
       });
 
