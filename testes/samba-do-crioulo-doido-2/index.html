@@ -106,9 +106,9 @@
         isDragging = false;
         cartesianWidth = $("#cartesianPlane").width();
         cartesianHeight = $(window).height(); //removing padding
-        normalWidth = cartesianWidth - (cartesianWidth%20);
+        normalWidth = cartesianWidth - (cartesianWidth%100) + 100;
         //normalWidth = normalWidth +20*normalWidth%5;
-        normalHeight = cartesianHeight + 20*normalWidth%5;
+        normalHeight = cartesianHeight - (cartesianHeight%100) + 100;
         //normalHeight = cartesianHeight - (cartesianHeight%20);
         console.log("normal h:"+normalHeight + " normal w:" +normalWidth);
         console.log("h: "+cartesianHeight+" w:"+cartesianWidth);
