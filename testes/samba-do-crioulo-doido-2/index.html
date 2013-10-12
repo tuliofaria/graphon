@@ -33,37 +33,44 @@
       var lastCursorY;
       var isDragging;
 
+      var textLayer;
+      var textLabels;
+
       //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
         for(var i = 0; i <= width/2; i+=offset){
-          var line1 = new Kinetic.Line({
+          if(i!=width/2 && i != 0){
+            var line1 = new Kinetic.Line({
                 points: [i, -height/2, i, height/2],
                 stroke: color,
                 strokeWidth: 0.1
-              });
+            });
+            verticalArray.push(line1);
+            currentLayer.add(line1);
+          }
           var line2 = new Kinetic.Line({
-                points: [-i, -height/2, -i, height/2],
-                stroke: color,
-                strokeWidth: 0.1
-              });
-          verticalArray.push(line1);
-          currentLayer.add(line1);
+            points: [-i, -height/2, -i, height/2],
+            stroke: color,
+            strokeWidth: 0.1
+          });
           verticalArray.push(line2);
           currentLayer.add(line2);
         }
         for(var i = 0; i <= height/2; i+=offset){
-          var line1 = new Kinetic.Line({
-                points: [-width/2, i, width/2, i],
-                stroke: color,
-                strokeWidth: 0.1
-              });
+          if(i != height/2 && i !=0){
+            var line1 = new Kinetic.Line({
+              points: [-width/2, i, width/2, i],
+              stroke: color,
+              strokeWidth: 0.1
+            });
+            horizontalArray.push(line1);
+            currentLayer.add(line1);
+          }
           var line2 = new Kinetic.Line({
-                points: [-width/2, -i, width/2, -i],
-                stroke: color,
-                strokeWidth: 0.1
+            points: [-width/2, -i, width/2, -i],
+            stroke: color,
+            strokeWidth: 0.1
           });
-          horizontalArray.push(line1);
-          currentLayer.add(line1);
           horizontalArray.push(line2);
           currentLayer.add(line2);
         }
@@ -131,17 +138,70 @@
         var xAxis = new Kinetic.Line({
           points: [-normalWidth/2, 0, normalWidth/2, 0],
           stroke: 'black',
-          strokeWidth: 0.8
+          strokeWidth: 1
         });
         var yAxis = new Kinetic.Line({
           points: [0, -normalHeight/2, 0, normalHeight/2],
           stroke: 'black',
-          strokeWidth: 0.8
+          strokeWidth: 1
         });
         axis.push(xAxis);
         axis.push(yAxis);
         axisLayer.add(yAxis);
         axisLayer.add(xAxis);
+      }
+
+      function drawText(offset, width, height){
+        for(var i = 0; i < width/2; i+=offset){
+          if(i!=width/2 && i != 0){
+            var text1 = new Kinetic.Text({
+              x: i+3,
+              y: 2,
+              text: ""+i/offset+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            textLabels.push(text1);
+            textLayer.add(text1);
+          }
+          var text2 = new Kinetic.Text({
+              x: -i+3,
+              y: 2,
+              text: ""+((-i)/offset)+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            textLabels.push(text2);
+            textLayer.add(text2);
+        }
+        for(var i = 0; i < height/2; i+=offset){
+          if(i!=height/2 && i != 0){
+            var text1 = new Kinetic.Text({
+              x: 5,
+              y: i,
+              text: ""+((-i)/offset)+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            textLabels.push(text1);
+            textLayer.add(text1);
+          }
+          if(i!=0){
+            var text2 = new Kinetic.Text({
+              x: 5,
+              y: -i,
+              text: ""+i/offset+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            textLabels.push(text2);
+            textLayer.add(text2);
+          }
+        }
       }
 
       $(function(){
@@ -166,14 +226,18 @@
         smallerHorizontalLines = [];
         biggerHorizontalLines = [];
         axis = [];
+        textLabels = [];
 
         //initLayers
+        textLayer = new Kinetic.Layer();
         smallerGridLayer = new Kinetic.Layer();
-        initLines(smallerGridLayer,smallerVerticalLines, smallerHorizontalLines, 20, normalWidth, normalHeight, 'black');
+        initLines(smallerGridLayer,smallerVerticalLines, smallerHorizontalLines, 20, normalWidth, normalHeight, '#333333');
         biggerGridLayer = new Kinetic.Layer();
-        initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, 'red');
+        initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, '#777777');
         axisLayer = new Kinetic.Layer();
         drawAxis();
+        drawText(100, normalWidth, normalHeight);
+        stage.add(textLayer);
         stage.add(smallerGridLayer);
         stage.add(biggerGridLayer);
         stage.add(axisLayer);
