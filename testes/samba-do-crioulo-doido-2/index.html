@@ -36,34 +36,38 @@
       //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
         for(var i = 0; i <= width/2; i+=offset){
-          var line1 = new Kinetic.Line({
+          if(i!=width/2 && i != 0){
+            var line1 = new Kinetic.Line({
                 points: [i, -height/2, i, height/2],
                 stroke: color,
                 strokeWidth: 0.1
-              });
+            });
+            verticalArray.push(line1);
+            currentLayer.add(line1);
+          }
           var line2 = new Kinetic.Line({
-                points: [-i, -height/2, -i, height/2],
-                stroke: color,
-                strokeWidth: 0.1
-              });
-          verticalArray.push(line1);
-          currentLayer.add(line1);
+            points: [-i, -height/2, -i, height/2],
+            stroke: color,
+            strokeWidth: 0.1
+          });
           verticalArray.push(line2);
           currentLayer.add(line2);
         }
         for(var i = 0; i <= height/2; i+=offset){
-          var line1 = new Kinetic.Line({
-                points: [-width/2, i, width/2, i],
-                stroke: color,
-                strokeWidth: 0.1
-              });
+          if(i != height/2 && i !=0){
+            var line1 = new Kinetic.Line({
+              points: [-width/2, i, width/2, i],
+              stroke: color,
+              strokeWidth: 0.1
+            });
+            horizontalArray.push(line1);
+            currentLayer.add(line1);
+          }
           var line2 = new Kinetic.Line({
-                points: [-width/2, -i, width/2, -i],
-                stroke: color,
-                strokeWidth: 0.1
+            points: [-width/2, -i, width/2, -i],
+            stroke: color,
+            strokeWidth: 0.1
           });
-          horizontalArray.push(line1);
-          currentLayer.add(line1);
           horizontalArray.push(line2);
           currentLayer.add(line2);
         }
