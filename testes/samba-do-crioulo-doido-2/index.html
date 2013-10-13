@@ -41,7 +41,7 @@
         for(var i = 0; i <= width/2; i+=offset){
           if(i!=width/2 && i != 0){
             var line1 = new Kinetic.Line({
-                points: [i, -height/2, i, height/2],
+                points: [i+0.5, -height/2, i+0.5, height/2],
                 stroke: color,
                 strokeWidth: 0.1
             });
@@ -49,7 +49,7 @@
             currentLayer.add(line1);
           }
           var line2 = new Kinetic.Line({
-            points: [-i, -height/2, -i, height/2],
+            points: [-i+0.5, -height/2, -i+0.5, height/2],
             stroke: color,
             strokeWidth: 0.1
           });
@@ -59,7 +59,7 @@
         for(var i = 0; i <= height/2; i+=offset){
           if(i != height/2 && i !=0){
             var line1 = new Kinetic.Line({
-              points: [-width/2, i, width/2, i],
+              points: [-width/2, i+0.5, width/2, i+0.5],
               stroke: color,
               strokeWidth: 0.1
             });
@@ -67,7 +67,7 @@
             currentLayer.add(line1);
           }
           var line2 = new Kinetic.Line({
-            points: [-width/2, -i, width/2, -i],
+            points: [-width/2, -i+0.5, width/2, -i+0.5],
             stroke: color,
             strokeWidth: 0.1
           });
@@ -136,12 +136,12 @@
 
       function drawAxis(){
         var xAxis = new Kinetic.Line({
-          points: [-normalWidth/2, 0, normalWidth/2, 0],
+          points: [-normalWidth/2, 0.5, normalWidth/2, 0.5],
           stroke: 'black',
           strokeWidth: 1
         });
         var yAxis = new Kinetic.Line({
-          points: [0, -normalHeight/2, 0, normalHeight/2],
+          points: [0+0.5, -normalHeight/2, 0+0.5, normalHeight/2],
           stroke: 'black',
           strokeWidth: 1
         });
