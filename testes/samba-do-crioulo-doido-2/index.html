@@ -34,7 +34,12 @@
       var isDragging;
 
       var textLayer;
-      var textLabels;
+      var xTextLabels;
+      var yTextLabels;
+      var isXBlocked;
+      var isYBlocked;
+      var cumulatedXOffset;
+      var cumulatedYOffset;
 
       //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
@@ -152,7 +157,7 @@
       }
 
       function drawText(offset, width, height){
-        for(var i = 0; i < width/2; i+=offset){
+        for(var i = 0; i <= width/2; i+=offset){
           if(i!=width/2 && i != 0){
             var text1 = new Kinetic.Text({
               x: i+3,
@@ -162,7 +167,7 @@
               fontFamily: 'Helvetica',
               fill: 'black'
             });
-            textLabels.push(text1);
+            xTextLabels.push(text1);
             textLayer.add(text1);
           }
           var text2 = new Kinetic.Text({
@@ -173,33 +178,106 @@
               fontFamily: 'Helvetica',
               fill: 'black'
             });
-            textLabels.push(text2);
+            xTextLabels.push(text2);
             textLayer.add(text2);
         }
-        for(var i = 0; i < height/2; i+=offset){
+        for(var i = 0; i <= height/2; i+=offset){
           if(i!=height/2 && i != 0){
             var text1 = new Kinetic.Text({
-              x: 5,
+              x: 8,
               y: i,
               text: ""+((-i)/offset)+"",
               fontSize: 14,
               fontFamily: 'Helvetica',
               fill: 'black'
             });
-            textLabels.push(text1);
+            yTextLabels.push(text1);
             textLayer.add(text1);
           }
-          if(i!=0){
-            var text2 = new Kinetic.Text({
-              x: 5,
+          var text2 = new Kinetic.Text({
+              x: 8,
               y: -i,
               text: ""+i/offset+"",
               fontSize: 14,
               fontFamily: 'Helvetica',
               fill: 'black'
             });
-            textLabels.push(text2);
-            textLayer.add(text2);
+          yTextLabels.push(text2);
+          if(i==0)
+            text2.hide();
+          textLayer.add(text2);
+        }
+      }
+
+      function reDrawText(xOffset, yOffset){
+        if(xOffset != 0 && !isYBlocked){
+          for(var i = 0; i < xTextLabels.length; i++){
+            var textPositionX = parseInt(xTextLabels[i].getAttr('x'));
+            var textValue = parseInt(xTextLabels[i].getAttr('text'));
+            if(xOffset > 0){ // ta indo para a direita
+              if(textPositionX + xOffset >= normalWidth/2){//ta no limite direito...
+                xTextLabels[i].setAttr('x', textPositionX + xOffset - normalWidth);
+                xTextLabels[i].setAttr('text', textValue - normalWidth/100);
+              }else{
+                xTextLabels[i].setAttr('x', textPositionX + xOffset);
+              }
+            } else { // esquerda
+              if(textPositionX + xOffset < -normalWidth/2){//ta no limite esquerdo...
+                xTextLabels[i].setAttr('x', textPositionX + xOffset + normalWidth);
+                xTextLabels[i].setAttr('text', textValue + normalWidth/100);
+              }else{
+                xTextLabels[i].setAttr('x', textPositionX + xOffset);
+              }
+            }     
+          }
+          for(var i = 0; i < yTextLabels.length; i++){
+            var textPositionX = parseInt(yTextLabels[i].getAttr('x'));
+            //tenho que ver como limitar =/
+            if(xOffset > 0){ //direita
+              yTextLabels[i].setAttr('x', textPositionX + xOffset);
+            } else { //esquerda
+              yTextLabels[i].setAttr('x', textPositionX + xOffset);
+            }
+          }
+        }
+        if(yOffset != 0 && !isXBlocked){
+          for(var i = 0; i < yTextLabels.length; i++){
+            var textPositionY = parseInt(yTextLabels[i].getAttr('y'));
+            var textValue = parseInt(yTextLabels[i].getAttr('text'));
+            if(yOffset > 0){ // ta indo para cima
+              if(i == 0 && yTextLabels[0].getAttr('text') != '0'){
+                console.log(yTextLabels[0].getAttr('text'));
+                yTextLabels[0].show();
+              } else {
+                yTextLabels[0].hide();
+              }
+              if(textPositionY + yOffset > normalHeight/2){//ta no limite superior...
+                yTextLabels[i].setAttr('y', textPositionY + yOffset - normalHeight);
+                yTextLabels[i].setAttr('text', textValue + normalHeight/100);
+              }else{
+                yTextLabels[i].setAttr('y', textPositionY + yOffset);
+              }
+            } else { // esquerda
+              if(textPositionY + yOffset < -normalHeight/2){//ta no limite inferior...
+                yTextLabels[i].setAttr('y', textPositionY + yOffset + normalHeight);
+                yTextLabels[i].setAttr('text', textValue - normalHeight/100);
+              }else{
+                yTextLabels[i].setAttr('y', textPositionY + yOffset);
+              }
+              
+              
+
+              
+            }     
+          }
+          for(var i = 0; i < xTextLabels.length; i++){
+            var textPositionY = parseInt(xTextLabels[i].getAttr('y'));
+            //tenho que ver como limitar =/
+            if(yOffset > 0){ //direita
+              xTextLabels[i].setAttr('y', textPositionY + yOffset);
+            } else { //esquerda
+              xTextLabels[i].setAttr('y', textPositionY + yOffset);
+            }
           }
         }
       }
@@ -226,7 +304,12 @@
         smallerHorizontalLines = [];
         biggerHorizontalLines = [];
         axis = [];
-        textLabels = [];
+        xTextLabels = [];
+        yTextLabels = [];
+        isYBlocked = false;
+        isXBlocked = false;
+        cumulatedYOffset = 0;
+        cumulatedXOffset = 0;
 
         //initLayers
         textLayer = new Kinetic.Layer();
@@ -241,7 +324,7 @@
         stage.add(smallerGridLayer);
         stage.add(biggerGridLayer);
         stage.add(axisLayer);
-        stage.on('contentMousedown contentTouchstart', function(evt){
+        stage.on('contentMousedown contentTouchstart contentTap contentDbltap', function(evt){
           isDragging = true;
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
@@ -253,18 +336,36 @@
           if(isDragging){
             var xOffset = stage.getPointerPosition().x - lastCursorX;
             var yOffset = stage.getPointerPosition().y - lastCursorY;
+            
+            /* COMECO DE TESTE TOSCO */
+            cumulatedXOffset += xOffset;
+            cumulatedYOffset += yOffset;
+            if(xOffset >= normalWidth/2 - 5 || xOffset <= -normalWidth/2 + 5){
+              isXBlocked = true;
+            }else{
+              isXBlocked = false;
+            }
+            if(yOffset >= normalHeight/2 - 5 || yOffset <= -normalHeight/2 + 5){
+              isYBlocked = true;
+            } else {
+              isYBlocked = false;
+            }
+            /* FINAL DE TESTE TOSCO */
             reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, smallerHorizontalLines, smallerVerticalLines, smallerGridLayer);
             reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, biggerHorizontalLines, biggerVerticalLines, biggerGridLayer);
             reDrawAxis(xOffset, yOffset);
-            //com batchDraw depois pra não aparecer linha diagonal
+            reDrawText(xOffset, yOffset);
+            textLayer.batchDraw();
             smallerGridLayer.batchDraw();
             biggerGridLayer.batchDraw();
             axisLayer.batchDraw();
+
+
+            //stage.draw();
           }
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
         });
-
         stage.draw();
       });
     </script>
