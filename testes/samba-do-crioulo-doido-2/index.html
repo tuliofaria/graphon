@@ -182,7 +182,7 @@
             textLayer.add(text2);
         }
         for(var i = 0; i <= height/2; i+=offset){
-          if(i!=height/2 && i != 0){
+          if(i != height/2){
             var text1 = new Kinetic.Text({
               x: 8,
               y: i,
@@ -191,9 +191,13 @@
               fontFamily: 'Helvetica',
               fill: 'black'
             });
+            if(i == 0){
+              text1.hide();
+            }
             yTextLabels.push(text1);
             textLayer.add(text1);
           }
+          if(i != 0){
           var text2 = new Kinetic.Text({
               x: 8,
               y: -i,
@@ -203,9 +207,8 @@
               fill: 'black'
             });
           yTextLabels.push(text2);
-          if(i==0)
-            text2.hide();
           textLayer.add(text2);
+          }
         }
       }
 
@@ -245,12 +248,6 @@
             var textPositionY = parseInt(yTextLabels[i].getAttr('y'));
             var textValue = parseInt(yTextLabels[i].getAttr('text'));
             if(yOffset > 0){ // ta indo para cima
-              if(i == 0 && yTextLabels[0].getAttr('text') != '0'){
-                console.log(yTextLabels[0].getAttr('text'));
-                yTextLabels[0].show();
-              } else {
-                yTextLabels[0].hide();
-              }
               if(textPositionY + yOffset > normalHeight/2){//ta no limite superior...
                 yTextLabels[i].setAttr('y', textPositionY + yOffset - normalHeight);
                 yTextLabels[i].setAttr('text', textValue + normalHeight/100);
@@ -264,10 +261,11 @@
               }else{
                 yTextLabels[i].setAttr('y', textPositionY + yOffset);
               }
-              
-              
-
-              
+            }
+            if(yTextLabels[i].getAttr('text') == '0'){
+              yTextLabels[i].hide();
+            } else {
+              yTextLabels[i].show();
             }     
           }
           for(var i = 0; i < xTextLabels.length; i++){
