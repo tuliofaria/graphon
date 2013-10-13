@@ -1,21 +1,51 @@
 <!DOCTYPE HTML>
-<html>
+<html ng-app="graphon">
   <head>
     <meta charset="utf-8" />
     <title>Gráficos (MathMagic)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="css/math.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/jquery.ui.css" rel="stylesheet">
     <script src="js/kinetic-v4.7.2.min.js"></script>
     <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery.ui.js"></script>
+    <script src="js/math.min.js"></script>
+    <script src="js/calculadora.js"></script>
     <script src="js/graficos.js"></script>
+
+    <script src="js/angular.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/angular-resource.js"></script>
+    <script src="js/uibootstrap.js"></script>
+    <script src="js/slider.js"></script>
   </head>
-  <body>
+  <body ng-controller="MainCtrl" id="MainCtrl">
     <div class="header">
       <img src="img/logo.png" alt="Gráficos (MathMagic)" />
     </div>
+    <div class="toolbar">
+      <span class="closeToolbar"><a href="javascript;"><i class="icon-caret-left i1"></i><i class="icon-caret-right i2"></i></a></span>
+      <div class="equation">
+          <div class="mathquill-editable math" id="bla">ax^2+bx+c</div>
+      </div>
+      <div class="params">
+        <div class="param" ng-repeat="p in parameters"><b>{{p.name}} = {{p.currentValue}}</b><br>
+          De: {{p.starting}} a: {{p.ending}}
+          <div class="sliderContainer">
+            <div ui-slider min="{{p.starting}}" max="{{p.ending}}" ng-model="p.currentValue"></div>
+          </div>
+        </div>
+      </div>
+      <div ng-hide="size(parameters)==0">
+        <button class="btn"><i class="icon-play"></i> Animar parâmetros</button>
+      </div>
+    </div>
     <div class="toolbar2">
-      <button>CENTER</button>
+      <a href="javascript:;" class="btnHome"><i class="icon-home"></i></a>
     </div>
     <div class="container">
       <div id="cartesianPlane"></div> 
@@ -26,34 +56,34 @@
           <a id="keyboardToggle" src="#"><i class="icon-keyboard"></i> <i id="iconeCaret" class="icon-caret-down"></i><i id="iconeCaret2" class="icon-caret-up"></i></a>
         </div>  
         <div class="span3 keyboardCont">
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','7');">7</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','8');">8</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">9</span>  
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','*');">×</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','4');">4</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','5');">5</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">6</span> 
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','+');">+</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','1');">1</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','2');">2</span>
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','3');">3</span> 
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','-');">-</span>  
-              <span class="keyboard number numberzero" onClick="$('#bla').mathquill('write','9');">0</span>  
-              <span class="keyboard number" onClick="$('#bla').mathquill('write','9');">.</span>  
-              <span class="keyboard number lastitem" onClick="$('#bla').mathquill('cmd','/');">÷</span>
+              <span class="keyboard number" data-cmd="write" data-value="7">7</span>  
+              <span class="keyboard number" data-cmd="write" data-value="8">8</span>
+              <span class="keyboard number" data-cmd="write" data-value="9">9</span>
+              <span class="keyboard number lastitem" data-cmd="cmd" data-value="*">×</span>  
+              <span class="keyboard number" data-cmd="write" data-value="4">4</span>  
+              <span class="keyboard number" data-cmd="write" data-value="5">5</span>  
+              <span class="keyboard number" data-cmd="write" data-value="6">6</span> 
+              <span class="keyboard number lastitem" data-cmd="cmd" data-value="+">+</span>
+              <span class="keyboard number" data-cmd="write" data-value="1">1</span>  
+              <span class="keyboard number" data-cmd="write" data-value="2">2</span>
+              <span class="keyboard number" data-cmd="write" data-value="3">3</span> 
+              <span class="keyboard number lastitem" data-cmd="cmd" data-value="-">-</span>  
+              <span class="keyboard number numberzero" data-cmd="write" data-value="9">0</span>  
+              <span class="keyboard number" data-cmd="write" data-value="9">.</span>  
+              <span class="keyboard number lastitem" data-cmd="cmd" data-value="/">÷</span>
         </div>
         <div class="span3 keyboardCont">
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','^2');">a<sup>2</sup></span>
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\sqrt');">√</span>
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('write','x');">x</span>
-              <span class="keyboard keysymbol" onClick="$('#bla').mathquill('cmd','\^');">a<sup>b</sup></span>
+              <span class="keyboard keysymbol" data-cmd="write" data-value="^2">a<sup>2</sup></span>
+              <span class="keyboard keysymbol" data-cmd="cmd" data-value="\sqrt">√</span>
+              <span class="keyboard keysymbol" data-cmd="write" data-value="x">x</span>
+              <span class="keyboard keysymbol" data-cmd="cmd" data-value="\^">a<sup>b</sup></span>
               <span class="keyboard symbolbackspace lastitem" onClick="alert('preguiça de terminar hoje...');">Backspace</span>
               <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">Del</span>
               <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8593;</span>
               <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">&#8629;</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8592;</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8595;</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8594;</span>
+              <span class="keyboard keysymbol" onClick="alert('33');">&#8592;</span>
+              <span class="keyboard keysymbol" data-cmd="key" data-cmd="\left">aa&#8595;</span>
+              <span class="keyboard keysymbol" onClick="alert('11');">&#8594;</span>
         </div>
       </div>
     </div><!-- Keyboardcontainer -->

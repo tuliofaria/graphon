@@ -118,7 +118,8 @@ var stage;
         var xAxis = new Kinetic.Line({
           points: [-normalWidth/2, 0, normalWidth/2, 0],
           stroke: 'black',
-          strokeWidth: 0.8
+          strokeWidth: 0.8,
+          lineCap: 'square'
         });
         var yAxis = new Kinetic.Line({
           points: [0, -normalHeight/2, 0, normalHeight/2],
@@ -144,8 +145,9 @@ var stage;
           width: normalWidth,
           height: normalHeight,
           draggable: false,
-          x: normalWidth/2,
-          y: normalHeight/2,
+          x: parseInt(normalWidth/2),
+          y: parseInt(normalHeight/2),
+          scale: 1.2
         });
 
         //init arrays
@@ -194,7 +196,10 @@ var stage;
         $(window).resize(function(){
           $("#cartesianPlane").height($(window).height());
         });
-
+        $("span.keyboard").click(function(){
+          $('#bla').mathquill($(this).attr("data-cmd"),$(this).attr("data-value"));
+          //$('#bla').Cursor($(this).attr("data-cmd"),$(this).attr("data-value"));
+        });
         $("#iconeCaret").hide();
         $(".keyboardCont").hide();
         $("#keyboardToggle").click(function(){
@@ -203,5 +208,29 @@ var stage;
           $("#iconeCaret2").toggle();
           return false;
         });
+
+        $(".closeToolbar .i2").hide();
+        $(".closeToolbar a").click(function(){
+          if($(".toolbar").css("left")=="0px"){
+            $(".toolbar").animate({ left: 0-$(".toolbar").width() });
+            $(".closeToolbar .i1").hide();
+            $(".closeToolbar .i2").show();
+          }else{
+            $(".toolbar").animate({ left: 0 });
+            $(".closeToolbar .i2").hide();
+            $(".closeToolbar .i1").show();
+          }
+          
+          return false;
+        });
+
+        var latexMath = $("#bla");
+        latexMath.bind('keydown keypress', function() {
+          setTimeout(function() {
+            var latex = latexMath.mathquill('latex');
+            var scope = angular.element($("#MainCtrl")).scope();
+            scope.updateParams();
+          });
+        }).keydown().focus();
 
       });
