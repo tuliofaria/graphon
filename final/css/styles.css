@@ -9,7 +9,7 @@
 	user-select: none;
 }
 .header{
-	background: #C0392B;
+	background: #2C3E50;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -42,7 +42,7 @@ body{
 }
 .btnHome{
 	display: block;
-	background: #C0392B;
+	background: #2C3E50;
 	color: white;
 	font-size: 25px;
 	text-decoration: none;
@@ -55,7 +55,7 @@ body{
 	left: 0px;
 	top: 50px;
 	z-index: 20;
-	background: #C0392B;
+	background: #7F8C8D;
 }
 .closeToolbar{
 	position: absolute;
@@ -64,7 +64,7 @@ body{
 	color: white;
 	padding: 4px;
 	display: block;
-	background: #C0392B;
+	background: #2C3E50;
 }
 .closeToolbar a{
 	text-decoration: none;
@@ -76,7 +76,7 @@ body{
 .equation{
 	float: left;
 	color: white;
-	background: #E74C3C;
+	background: #34495E;
 	width: 100%;
 }
 .equation .math{
@@ -93,7 +93,7 @@ body{
 }
 .param{
 	margin: 2px;
-	border-top: 1px solid #E74C3C;
+	border-top: 1px solid #2C3E50;
 	color: white;
 	padding: 4px;
 	font-family: arial;
@@ -103,7 +103,7 @@ body{
 	margin: 4px;
 }
 .btn{
-	background: #E74C3C;
+	background: #2C3E50;
 	border: none;
 	width: 100%;
 	cursor: pointer;
@@ -146,7 +146,7 @@ url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.svg#svgstixgeneral
 }
 
 .keyboardcontainer{
-	background-color: #E74C3C;
+	background: #2C3E50;
 	font: stixgeneral;  
 	bottom: 0;
 	z-index:5000;
@@ -174,7 +174,7 @@ url('../mathquill/font/stixgeneral-bundle/stixgeneral-webfont.svg#svgstixgeneral
 	float: left;
 	line-height: 200%;  
 	text-align: center;  
-	background: #C0392B;
+	background: #34495E;
 	color: white;
 	font-weight: bold;
 	font-size: 120%;
