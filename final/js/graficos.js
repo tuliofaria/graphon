@@ -1,4 +1,4 @@
-var stage;
+      var stage;
       var scale;
       var cartesianWidth;
       var cartesianHeight;
@@ -20,37 +20,49 @@ var stage;
       var lastCursorY;
       var isDragging;
 
+      var textLayer;
+      var xTextLabels;
+      var yTextLabels;
+      var isXBlocked;
+      var isYBlocked;
+      var cumulatedXOffset;
+      var cumulatedYOffset;
+
       //aqui width e height estão normalizados
       function initLines(currentLayer,verticalArray, horizontalArray, offset, width, height, color){
         for(var i = 0; i <= width/2; i+=offset){
-          var line1 = new Kinetic.Line({
-                points: [i, -height/2, i, height/2],
+          if(i!=width/2 && i != 0){
+            var line1 = new Kinetic.Line({
+                points: [i+0.5, -height/2, i+0.5, height/2],
                 stroke: color,
                 strokeWidth: 0.1
-              });
+            });
+            verticalArray.push(line1);
+            currentLayer.add(line1);
+          }
           var line2 = new Kinetic.Line({
-                points: [-i, -height/2, -i, height/2],
-                stroke: color,
-                strokeWidth: 0.1
-              });
-          verticalArray.push(line1);
-          currentLayer.add(line1);
+            points: [-i+0.5, -height/2, -i+0.5, height/2],
+            stroke: color,
+            strokeWidth: 0.1
+          });
           verticalArray.push(line2);
           currentLayer.add(line2);
         }
         for(var i = 0; i <= height/2; i+=offset){
-          var line1 = new Kinetic.Line({
-                points: [-width/2, i, width/2, i],
-                stroke: color,
-                strokeWidth: 0.1
-              });
+          if(i != height/2 && i !=0){
+            var line1 = new Kinetic.Line({
+              points: [-width/2, i+0.5, width/2, i+0.5],
+              stroke: color,
+              strokeWidth: 0.1
+            });
+            horizontalArray.push(line1);
+            currentLayer.add(line1);
+          }
           var line2 = new Kinetic.Line({
-                points: [-width/2, -i, width/2, -i],
-                stroke: color,
-                strokeWidth: 0.1
+            points: [-width/2, -i+0.5, width/2, -i+0.5],
+            stroke: color,
+            strokeWidth: 0.1
           });
-          horizontalArray.push(line1);
-          currentLayer.add(line1);
           horizontalArray.push(line2);
           currentLayer.add(line2);
         }
@@ -116,15 +128,14 @@ var stage;
 
       function drawAxis(){
         var xAxis = new Kinetic.Line({
-          points: [-normalWidth/2, 0, normalWidth/2, 0],
+          points: [-normalWidth/2, 0.5, normalWidth/2, 0.5],
           stroke: 'black',
-          strokeWidth: 0.8,
-          lineCap: 'square'
+          strokeWidth: 1
         });
         var yAxis = new Kinetic.Line({
-          points: [0, -normalHeight/2, 0, normalHeight/2],
+          points: [0+0.5, -normalHeight/2, 0+0.5, normalHeight/2],
           stroke: 'black',
-          strokeWidth: 0.8
+          strokeWidth: 1
         });
         axis.push(xAxis);
         axis.push(yAxis);
@@ -132,10 +143,133 @@ var stage;
         axisLayer.add(xAxis);
       }
 
+      function drawText(offset, width, height){
+        for(var i = 0; i <= width/2; i+=offset){
+          if(i!=width/2 && i != 0){
+            var text1 = new Kinetic.Text({
+              x: i+3,
+              y: 2,
+              text: ""+i/offset+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            xTextLabels.push(text1);
+            textLayer.add(text1);
+          }
+          var text2 = new Kinetic.Text({
+              x: -i+3,
+              y: 2,
+              text: ""+((-i)/offset)+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            xTextLabels.push(text2);
+            textLayer.add(text2);
+        }
+        for(var i = 0; i <= height/2; i+=offset){
+          if(i != height/2){
+            var text1 = new Kinetic.Text({
+              x: 8,
+              y: i,
+              text: ""+((-i)/offset)+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+            if(i == 0){
+              text1.hide();
+            }
+            yTextLabels.push(text1);
+            textLayer.add(text1);
+          }
+          if(i != 0){
+          var text2 = new Kinetic.Text({
+              x: 8,
+              y: -i,
+              text: ""+i/offset+"",
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              fill: 'black'
+            });
+          yTextLabels.push(text2);
+          textLayer.add(text2);
+          }
+        }
+      }
+
+      function reDrawText(xOffset, yOffset){
+        if(xOffset != 0 && !isYBlocked){
+          for(var i = 0; i < xTextLabels.length; i++){
+            var textPositionX = parseInt(xTextLabels[i].getAttr('x'));
+            var textValue = parseInt(xTextLabels[i].getAttr('text'));
+            if(xOffset > 0){ // ta indo para a direita
+              if(textPositionX + xOffset >= normalWidth/2){//ta no limite direito...
+                xTextLabels[i].setAttr('x', textPositionX + xOffset - normalWidth);
+                xTextLabels[i].setAttr('text', textValue - normalWidth/100);
+              }else{
+                xTextLabels[i].setAttr('x', textPositionX + xOffset);
+              }
+            } else { // esquerda
+              if(textPositionX + xOffset < -normalWidth/2){//ta no limite esquerdo...
+                xTextLabels[i].setAttr('x', textPositionX + xOffset + normalWidth);
+                xTextLabels[i].setAttr('text', textValue + normalWidth/100);
+              }else{
+                xTextLabels[i].setAttr('x', textPositionX + xOffset);
+              }
+            }     
+          }
+          for(var i = 0; i < yTextLabels.length; i++){
+            var textPositionX = parseInt(yTextLabels[i].getAttr('x'));
+            //tenho que ver como limitar =/
+            if(xOffset > 0){ //direita
+              yTextLabels[i].setAttr('x', textPositionX + xOffset);
+            } else { //esquerda
+              yTextLabels[i].setAttr('x', textPositionX + xOffset);
+            }
+          }
+        }
+        if(yOffset != 0 && !isXBlocked){
+          for(var i = 0; i < yTextLabels.length; i++){
+            var textPositionY = parseInt(yTextLabels[i].getAttr('y'));
+            var textValue = parseInt(yTextLabels[i].getAttr('text'));
+            if(yOffset > 0){ // ta indo para cima
+              if(textPositionY + yOffset > normalHeight/2){//ta no limite superior...
+                yTextLabels[i].setAttr('y', textPositionY + yOffset - normalHeight);
+                yTextLabels[i].setAttr('text', textValue + normalHeight/100);
+              }else{
+                yTextLabels[i].setAttr('y', textPositionY + yOffset);
+              }
+            } else { // esquerda
+              if(textPositionY + yOffset < -normalHeight/2){//ta no limite inferior...
+                yTextLabels[i].setAttr('y', textPositionY + yOffset + normalHeight);
+                yTextLabels[i].setAttr('text', textValue - normalHeight/100);
+              }else{
+                yTextLabels[i].setAttr('y', textPositionY + yOffset);
+              }
+            }
+            if(yTextLabels[i].getAttr('text') == '0'){
+              yTextLabels[i].hide();
+            } else {
+              yTextLabels[i].show();
+            }     
+          }
+          for(var i = 0; i < xTextLabels.length; i++){
+            var textPositionY = parseInt(xTextLabels[i].getAttr('y'));
+            //tenho que ver como limitar =/
+            if(yOffset > 0){ //direita
+              xTextLabels[i].setAttr('y', textPositionY + yOffset);
+            } else { //esquerda
+              xTextLabels[i].setAttr('y', textPositionY + yOffset);
+            }
+          }
+        }
+      }
+
       $(function(){
         scale = 1;
         isDragging = false;
-        $("#cartesianPlane").height($(window).height());
         cartesianWidth = $("#cartesianPlane").width();
         cartesianHeight = $(window).height(); //removing padding
         normalWidth = cartesianWidth - (cartesianWidth%100) + 100;
@@ -145,9 +279,8 @@ var stage;
           width: normalWidth,
           height: normalHeight,
           draggable: false,
-          x: parseInt(normalWidth/2),
-          y: parseInt(normalHeight/2),
-          scale: 1.2
+          x: normalWidth/2,
+          y: normalHeight/2,
         });
 
         //init arrays
@@ -156,18 +289,27 @@ var stage;
         smallerHorizontalLines = [];
         biggerHorizontalLines = [];
         axis = [];
+        xTextLabels = [];
+        yTextLabels = [];
+        isYBlocked = false;
+        isXBlocked = false;
+        cumulatedYOffset = 0;
+        cumulatedXOffset = 0;
 
         //initLayers
+        textLayer = new Kinetic.Layer();
         smallerGridLayer = new Kinetic.Layer();
-        initLines(smallerGridLayer,smallerVerticalLines, smallerHorizontalLines, 20, normalWidth, normalHeight, 'black');
+        initLines(smallerGridLayer,smallerVerticalLines, smallerHorizontalLines, 20, normalWidth, normalHeight, '#333333');
         biggerGridLayer = new Kinetic.Layer();
-        initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, 'red');
+        initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, '#777777');
         axisLayer = new Kinetic.Layer();
         drawAxis();
+        drawText(100, normalWidth, normalHeight);
+        stage.add(textLayer);
         stage.add(smallerGridLayer);
         stage.add(biggerGridLayer);
         stage.add(axisLayer);
-        stage.on('contentMousedown contentTouchstart', function(evt){
+        stage.on('contentMousedown contentTouchstart contentTap contentDbltap', function(evt){
           isDragging = true;
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
@@ -179,19 +321,38 @@ var stage;
           if(isDragging){
             var xOffset = stage.getPointerPosition().x - lastCursorX;
             var yOffset = stage.getPointerPosition().y - lastCursorY;
+            
+            /* COMECO DE TESTE TOSCO */
+            cumulatedXOffset += xOffset;
+            cumulatedYOffset += yOffset;
+            if(xOffset >= normalWidth/2 - 5 || xOffset <= -normalWidth/2 + 5){
+              isXBlocked = true;
+            }else{
+              isXBlocked = false;
+            }
+            if(yOffset >= normalHeight/2 - 5 || yOffset <= -normalHeight/2 + 5){
+              isYBlocked = true;
+            } else {
+              isYBlocked = false;
+            }
+            /* FINAL DE TESTE TOSCO */
             reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, smallerHorizontalLines, smallerVerticalLines, smallerGridLayer);
             reDrawGrid(normalWidth, normalHeight, xOffset, yOffset, biggerHorizontalLines, biggerVerticalLines, biggerGridLayer);
             reDrawAxis(xOffset, yOffset);
-            //com batchDraw depois pra não aparecer linha diagonal
+            reDrawText(xOffset, yOffset);
+            textLayer.batchDraw();
             smallerGridLayer.batchDraw();
             biggerGridLayer.batchDraw();
             axisLayer.batchDraw();
+
+
+            //stage.draw();
           }
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
         });
-
         stage.draw();
+      
 
         $(window).resize(function(){
           $("#cartesianPlane").height($(window).height());
