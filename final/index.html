@@ -11,6 +11,8 @@
     <script src="js/kinetic-v4.7.2.min.js"></script>
     <script src="js/jquery-1.10.2.min.js"></script>
     <script src="js/jquery.ui.js"></script>
+    <script src="js/jquery.ui.touch.js"></script>
+    <script src="js/fastclick.js"></script>
     <script src="js/math.min.js"></script>
     <script src="js/calculadora.js"></script>
     <script src="js/graficos.js"></script>
@@ -41,7 +43,8 @@
         </div>
       </div>
       <div ng-hide="size(parameters)==0">
-        <button class="btn"><i class="icon-play"></i> Animar parâmetros</button>
+        <button class="btn" ng-click="isAnimatingParams=!isAnimatingParams" ng-show="!isAnimatingParams"><i class="icon-play"></i> Animar parâmetros</button>
+        <button class="btn" ng-click="isAnimatingParams=!isAnimatingParams" ng-show="isAnimatingParams"><i class="icon-stop"></i> Para paramêtros</button>
       </div>
     </div>
     <div class="toolbar2">
@@ -73,16 +76,16 @@
               <span class="keyboard number lastitem" data-cmd="cmd" data-value="/">÷</span>
         </div>
         <div class="span3 keyboardCont">
-              <span class="keyboard keysymbol" data-cmd="write" data-value="^2">a<sup>2</sup></span>
+              <span class="keyboard keysymbol" data-cmd="write" data-value="^2" style="padding: -4px 0;">a<sup>2</sup></span>
               <span class="keyboard keysymbol" data-cmd="cmd" data-value="\sqrt">√</span>
               <span class="keyboard keysymbol" data-cmd="write" data-value="x">x</span>
               <span class="keyboard keysymbol" data-cmd="cmd" data-value="\^">a<sup>b</sup></span>
               <span class="keyboard symbolbackspace lastitem" onClick="alert('preguiça de terminar hoje...');">Backspace</span>
               <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">Del</span>
               <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8593;</span>
-              <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">&#8629;</span>
-              <span class="keyboard keysymbol" onClick="alert('33');">&#8592;</span>
-              <span class="keyboard keysymbol" data-cmd="key" data-cmd="\left">aa&#8595;</span>
+              <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">c&#8629;</span>
+              <span class="keyboard keysymbol" data-cmd="moveLeft" data-cmd="moveLeft">b&#8592;</span>
+              <span class="keyboard keysymbol" data-cmd="backspace" data-cmd="backspace">a&#8595;</span>
               <span class="keyboard keysymbol" onClick="alert('11');">&#8594;</span>
         </div>
       </div>

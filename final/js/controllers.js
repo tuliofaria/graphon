@@ -1,6 +1,27 @@
-function MainCtrl($scope){
+function MainCtrl($scope, $timeout){
 	$scope.parameters= {
 	};
+    $scope.isAnimatingParams = false;
+    
+    $scope.$watch('aaaa', function(){
+        console.log(11);
+    });
+
+    $timeout(function somework(){
+        if($scope.isAnimatingParams){
+            var ps = {};
+            angular.forEach($scope.parameters, function(value, key){
+                if(value.ending<=value.currentValue){
+                    $scope.parameters[key].currentValue = value.starting;
+                }else{
+                    $scope.parameters[key].currentValue+=value.step;
+                }
+                ps[key] = value.currentValue;
+            });
+            drawChart(ps);
+        }
+        $timeout(somework, 500);
+    }, 500);
 
 	$scope.updateParams = function(){
         	var latex = $("#bla").mathquill('latex');
@@ -13,7 +34,8 @@ function MainCtrl($scope){
                         			name: value,
                         			starting: 0,
                         			ending: 50,
-                                                currentValue: 25
+                                    currentValue: 25,
+                                    step: 1
                         		};
                         	}
                         }

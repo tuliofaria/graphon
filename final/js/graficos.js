@@ -16,6 +16,8 @@
       var biggerVerticalLines;
       var biggerHorizontalLines;
 
+      var chartLayer;
+
       var lastCursorX;
       var lastCursorY;
       var isDragging;
@@ -266,6 +268,32 @@
           }
         }
       }
+      var chart = null;
+
+      
+
+      function drawChart(params){
+          var latex = $("#bla").mathquill('latex');
+          var calc = new Calc(latex);
+          var points = [];
+          for(var i=-normalWidth/2+cumulatedXOffset; i<normalWidth/2+cumulatedXOffset; i+=2){
+            params.x = i;
+            points.push(params.x);
+            var y = calc.eval(params);//+(h/2);
+            points.push(y);
+          }
+
+          var chart = new Kinetic.Line({
+            points: points,
+            stroke: 'red',
+            strokeWidth: 2,
+            lineCap: 'round',
+            lineJoin: 'round'
+          });
+          chartLayer.clear();
+          chartLayer.add(chart);
+          stage.draw();
+        }
 
       $(function(){
         scale = 1;
@@ -303,19 +331,31 @@
         biggerGridLayer = new Kinetic.Layer();
         initLines(biggerGridLayer,biggerVerticalLines, biggerHorizontalLines, 100, normalWidth, normalHeight, '#777777');
         axisLayer = new Kinetic.Layer();
+
+        chartLayer = new Kinetic.Layer();
+
+
         drawAxis();
         drawText(100, normalWidth, normalHeight);
         stage.add(textLayer);
         stage.add(smallerGridLayer);
         stage.add(biggerGridLayer);
         stage.add(axisLayer);
+        stage.add(chartLayer);
+
+        $('body').on('touchmove', function(e){
+          e.preventDefault();
+        });
+        
         stage.on('contentMousedown contentTouchstart contentTap contentDbltap', function(evt){
           isDragging = true;
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
+          
         });  
         stage.on('contentMouseup contentTouchend', function(evt){
           isDragging = false;
+          
         });
         stage.on('contentMousemove contentTouchmove', function(evt){
           if(isDragging){
@@ -350,10 +390,10 @@
           }
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
+          
         });
         stage.draw();
       
-
         $(window).resize(function(){
           $("#cartesianPlane").height($(window).height());
         });
@@ -393,5 +433,7 @@
             scope.updateParams();
           });
         }).keydown().focus();
+
+        FastClick.attach(document.body);
 
       });
