@@ -277,26 +277,28 @@
           var calc = new Calc(latex);
           var points = [];
           for(var i=-normalWidth/2+cumulatedXOffset; i<normalWidth/2+cumulatedXOffset; i+=2){
-            params.x = i;
-            points.push(params.x);
-            var y = calc.eval(params);//+(h/2);
+            params.x = i*scale;
+            points.push(params.x/scale);
+            var y = calc.eval(params)/scale;//+(h/2);
             points.push(y);
           }
-
-          var chart = new Kinetic.Line({
+          if(chart!=null){
+            chart.remove();
+            chartLayer.clear();
+          }
+          chart = new Kinetic.Line({
             points: points,
             stroke: 'red',
             strokeWidth: 2,
             lineCap: 'round',
             lineJoin: 'round'
           });
-          chartLayer.clear();
           chartLayer.add(chart);
           stage.draw();
         }
 
       $(function(){
-        scale = 1;
+        scale = 1/100;
         isDragging = false;
         cartesianWidth = $("#cartesianPlane").width();
         cartesianHeight = $(window).height(); //removing padding
@@ -333,7 +335,6 @@
         axisLayer = new Kinetic.Layer();
 
         chartLayer = new Kinetic.Layer();
-
 
         drawAxis();
         drawText(100, normalWidth, normalHeight);

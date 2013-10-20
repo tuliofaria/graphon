@@ -3,9 +3,15 @@ function MainCtrl($scope, $timeout){
 	};
     $scope.isAnimatingParams = false;
     
-    $scope.$watch('aaaa', function(){
-        console.log(11);
-    });
+    $scope.$watch('parameters', function(newValue){
+        if(!$scope.isAnimatingParams){
+            var ps = {};
+            angular.forEach($scope.parameters, function(value, key){
+                ps[key] = value.currentValue;
+            });
+            drawChart(ps);
+        }
+    }, true);
 
     $timeout(function somework(){
         if($scope.isAnimatingParams){
@@ -24,36 +30,36 @@ function MainCtrl($scope, $timeout){
     }, 500);
 
 	$scope.updateParams = function(){
-        	var latex = $("#bla").mathquill('latex');
-                var calc = new Calc(latex);
-                var ps = calc.params();
-                angular.forEach(ps, function(value, key){
-                	if(value!="x"){
-                        	if(!(value in $scope.parameters)){
-                        		$scope.parameters[value] = {
-                        			name: value,
-                        			starting: 0,
-                        			ending: 50,
-                                    currentValue: 25,
-                                    step: 1
-                        		};
-                        	}
-                        }
-                });
-                angular.forEach($scope.parameters, function(value, key){
-                        if(ps.indexOf(value.name)<0){
-                                delete $scope.parameters[key];
-                        }
-                });
-                $scope.$apply();
-                //$scope.parameters = calc.params();
+	    var latex = $("#bla").mathquill('latex');
+        var calc = new Calc(latex);
+        var ps = calc.params();
+        angular.forEach(ps, function(value, key){
+        	if(value!="x"){
+                	if(!(value in $scope.parameters)){
+                		$scope.parameters[value] = {
+                			name: value,
+                			starting: 1,
+                			ending: 10,
+                            currentValue: 1,
+                            step: 1
+                		};
+                	}
+                }
+        });
+        angular.forEach($scope.parameters, function(value, key){
+                if(ps.indexOf(value.name)<0){
+                        delete $scope.parameters[key];
+                }
+        });
+        $scope.$apply();
+        //$scope.parameters = calc.params();
 	}
 
-        $scope.size = function(obj){
-            var size = 0, key;
-            for (key in obj) {
-                if (obj.hasOwnProperty(key)) size++;
-            }
-            return size;
+    $scope.size = function(obj){
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
         }
+        return size;
+    }
 }
