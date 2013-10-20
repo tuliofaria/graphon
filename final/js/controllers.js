@@ -26,7 +26,7 @@ function MainCtrl($scope, $timeout){
             });
             drawChart(ps);
         }
-        $timeout(somework, 500);
+        $timeout(somework, 75);
     }, 500);
 
 	$scope.updateParams = function(){
@@ -38,10 +38,10 @@ function MainCtrl($scope, $timeout){
                 	if(!(value in $scope.parameters)){
                 		$scope.parameters[value] = {
                 			name: value,
-                			starting: 1,
+                			starting: -10,
                 			ending: 10,
                             currentValue: 1,
-                            step: 1
+                            step: 0.1
                 		};
                 	}
                 }
@@ -52,6 +52,13 @@ function MainCtrl($scope, $timeout){
                 }
         });
         $scope.$apply();
+        
+        var ps = {};
+        angular.forEach($scope.parameters, function(value, key){
+            ps[key] = value.currentValue;
+        });
+        drawChart(ps);
+
         //$scope.parameters = calc.params();
 	}
 

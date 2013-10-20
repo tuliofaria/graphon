@@ -280,6 +280,7 @@
             params.x = i*scale;
             points.push(params.x/scale);
             var y = calc.eval(params)/scale;//+(h/2);
+            y = -y;
             points.push(y);
           }
           if(chart!=null){
@@ -392,6 +393,9 @@
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;
           
+          chartLayer.move(xOffset, yOffset);
+          chartLayer.draw();
+
         });
         stage.draw();
       

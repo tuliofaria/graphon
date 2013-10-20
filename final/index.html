@@ -35,7 +35,7 @@
           <div class="mathquill-editable math" id="bla">ax^2+bx+c</div>
       </div>
       <div class="params">
-        <div class="param" ng-repeat="p in parameters"><b>{{p.name}} = {{p.currentValue}}</b><br>
+        <div class="param" ng-repeat="p in parameters"><b>{{p.name}} = {{p.currentValue | number:2}}</b><br>
           De: {{p.starting}} a: {{p.ending}}
           <div class="sliderContainer">
             <div ui-slider min="{{p.starting}}" max="{{p.ending}}" ng-model="p.currentValue"></div>
