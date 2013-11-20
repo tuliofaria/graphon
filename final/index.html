@@ -2,7 +2,7 @@
 <html ng-app="graphon">
   <head>
     <meta charset="utf-8" />
-    <title>Gráficos (MathMagic)</title>
+    <title>Gráficos (Aprendee)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="css/math.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
@@ -35,10 +35,15 @@
           <div class="mathquill-editable math" id="bla">ax^2+bx+c</div>
       </div>
       <div class="params">
-        <div class="param" ng-repeat="p in parameters"><b>{{p.name}} = {{p.currentValue | number:2}}</b><br>
+        <div class="param" ng-repeat="p in parameters">
+          <span ng-show="!isAnimatingParams">
+            <a href="javascript:;" ng-click="animateThis(p)" ng-show="!p.animating" class="playParam"><i class="icon-play"></i></a>
+            <a href="javascript:;" ng-click="stopAnimateThis(p)" ng-show="p.animating" class="playParam"><i class="icon-stop"></i></a>
+          </span>
+          <b>{{p.name}} = {{p.currentValue | number:2}}</b><br>
           De: {{p.starting}} a: {{p.ending}}
           <div class="sliderContainer">
-            <div ui-slider min="{{p.starting}}" max="{{p.ending}}" ng-model="p.currentValue"></div>
+            <div ui-slider min="{{p.starting}}" step="0.1" use-decimals max="{{p.ending}}" ng-model="p.currentValue"></div>
           </div>
         </div>
       </div>
@@ -53,7 +58,7 @@
     <div class="container">
       <div id="cartesianPlane"></div> 
     </div>
-    <span class="keyboardcontainer" id="keyboardcontainer">
+    <span class="keyboardcontainer" id="keyboardcontainer" style="display: none;">
       <div class="row-fluid">
         <div class="title">
           <a id="keyboardToggle" src="#"><i class="icon-keyboard"></i> <i id="iconeCaret" class="icon-caret-down"></i><i id="iconeCaret2" class="icon-caret-up"></i></a>
@@ -80,13 +85,13 @@
               <span class="keyboard keysymbol" data-cmd="cmd" data-value="\sqrt">√</span>
               <span class="keyboard keysymbol" data-cmd="write" data-value="x">x</span>
               <span class="keyboard keysymbol" data-cmd="cmd" data-value="\^">a<sup>b</sup></span>
-              <span class="keyboard symbolbackspace lastitem" onClick="alert('preguiça de terminar hoje...');">Backspace</span>
+              <span class="keyboard symbolbackspace lastitem" data-cmd="cmd2" data-value="Backspace">Backspace</span>
               <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">Del</span>
-              <span class="keyboard keysymbol" onClick="alert('preguiça de terminar hoje...');">&#8593;</span>
-              <span class="keyboard keysymbol lastitem" onClick="alert('preguiça de terminar hoje...');">c&#8629;</span>
-              <span class="keyboard keysymbol" data-cmd="moveLeft" data-cmd="moveLeft">b&#8592;</span>
-              <span class="keyboard keysymbol" data-cmd="backspace" data-cmd="backspace">a&#8595;</span>
-              <span class="keyboard keysymbol" onClick="alert('11');">&#8594;</span>
+              <span class="keyboard keysymbol" data-cmd="move" data-value="Up">&#8593;</span>
+              <span class="keyboard keysymbol lastitem" data-cmd="move" data-value="Up">Enter&#8629;</span>
+              <span class="keyboard keysymbol" data-cmd="move" data-value="Left">&#8592;</span>
+              <span class="keyboard keysymbol" data-cmd="move" data-value="Down">&#8595;</span>
+              <span class="keyboard keysymbol" data-cmd="move" data-value="Right">a&#8594;</span>
         </div>
       </div>
     </div><!-- Keyboardcontainer -->

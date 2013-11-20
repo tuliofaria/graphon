@@ -98,6 +98,17 @@ body{
 	padding: 4px;
 	font-family: arial;
 	font-size: 12px;
+	position: relative;
+}
+.playParam{
+	position: absolute;
+	top: 0;
+	right: -1px;
+	font-size: 16px;
+	color: white;
+	text-decoration: none;
+	background: #2C3E50;
+	padding: 3px;
 }
 .sliderContainer{
 	margin: 4px;

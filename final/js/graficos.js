@@ -276,7 +276,8 @@
           var latex = $("#bla").mathquill('latex');
           var calc = new Calc(latex);
           var points = [];
-          for(var i=-normalWidth/2+cumulatedXOffset; i<normalWidth/2+cumulatedXOffset; i+=2){
+          //console.log(" >> "+((-normalWidth/2)+cumulatedXOffset));
+          for(var i=(-normalWidth/2)-Math.abs(cumulatedXOffset); i<(normalWidth/2)+Math.abs(cumulatedXOffset); i+=2){
             params.x = i*scale;
             points.push(params.x/scale);
             var y = calc.eval(params)/scale;//+(h/2);
@@ -387,8 +388,11 @@
             biggerGridLayer.batchDraw();
             axisLayer.batchDraw();
 
-
+            //console.log(cumulatedXOffset+","+cumulatedYOffset);
             //stage.draw();
+
+            var scope = angular.element($("#MainCtrl")).scope();
+            scope.updateParams();
           }
           lastCursorX = stage.getPointerPosition().x;
           lastCursorY = stage.getPointerPosition().y;

@@ -63,6 +63,7 @@ var Calc = function(expr, infix) {
       else {
         // Variables (i.e. x as in f(x))
         rpn_expr.push(["var", token]);
+        //console.log('Token:' + token);
       }
     }
     else {
